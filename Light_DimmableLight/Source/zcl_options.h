@@ -46,8 +46,8 @@ PUBLIC void vLoadScenesNVM(void);
 /***        Macro Definitions                                             ***/
 /****************************************************************************/
 
-#define MONO_WITH_LEVEL
-
+//#define MONO_WITH_LEVEL
+#define CLD_COLOUR_CONTROL
 /*
  * Define ONE of the following to set the Primary and Secondary ZLL Channels
  *

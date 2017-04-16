@@ -38,7 +38,7 @@
 
 #include "app_timer_driver.h"
 
-
+#define RGB
 
 
 #ifdef RGB

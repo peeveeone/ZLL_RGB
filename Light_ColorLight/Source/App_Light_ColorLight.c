@@ -82,28 +82,14 @@ tsCLD_ZllDeviceTable sDeviceTable = { ZLL_NUMBER_DEVICES,
                                       }
 };
 
-uint16 u16CurrentLevel;
-uint16 u16TargetLevel;
-int16 i16DeltaLevel = 0;
-
-uint8 u8Update = 0xff;
-
-uint16 u16CurrentRed;
-uint16 u16TargetRed;
-int16 i16DeltaRed = 0;
-
-uint16 u16CurrentBlue;
-uint16 u16TargetBlue;
-int16 i16DeltaBlue = 0;
-
-uint16 u16CurrentGreen;
-uint16 u16TargetGreen;
-int16 i16DeltaGreen = 0;
 
 /****************************************************************************/
 /***        Exported Functions                                            ***/
 /****************************************************************************/
 PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 u8Ep);
+PRIVATE void vApp_eCLD_ColourControl_GetRGB(uint8* pu8Red,uint8* pu8Green,uint8* pu8Blue);
+
+
 /****************************************************************************
  **
  ** NAME: eApp_ZLL_RegisterEndpoint
@@ -228,24 +214,19 @@ PUBLIC void APP_vHandleIdentify(uint16 u16Time) {
 
     if (sIdEffect.u8Effect < E_CLD_IDENTIFY_EFFECT_STOP_EFFECT) {
         /* do nothing */
-        //DBG_vPrintf(TRACE_LIGHT_TASK, "Efect do nothing\n");
     }
     else if (u16Time == 0)
     {
             /*
              * Restore to off/off/colour state
              */
-        DBG_vPrintf(TRACE_PATH, "\nPath 3");
 
 
         vApp_eCLD_ColourControl_GetRGB(&u8Red, &u8Green, &u8Blue);
 
-        DBG_vPrintf(TRACE_LIGHT_TASK, "R %d G %d B %d L %d Hue %d Sat %d\n", u8Red, u8Green, u8Blue,
-                            sLight.sLevelControlServerCluster.u8CurrentLevel,
-                            sLight.sColourControlServerCluster.u8CurrentHue,
-                            sLight.sColourControlServerCluster.u8CurrentSaturation);
 
-        //DBG_vPrintf(TRACE_LIGHT_TASK, "\nidentify stop");
+
+
 
         vRGBLight_SetLevels(sLight.sOnOffServerCluster.bOnOff,
                             sLight.sLevelControlServerCluster.u8CurrentLevel,
@@ -432,7 +413,16 @@ PUBLIC void vStartEffect(uint8 u8Effect) {
  *
  ****************************************************************************/
 
-PUBLIC void vRGBLight_SetLevels(bool_t bOn, uint8 u8Level, uint8 u8Red, uint8 u8Green, uint8 u8Blue)
+PUBLIC void vRGBLight_SetLevels_current(){
+
+	uint8 u8Red, u8Green, u8Blue;
+
+	vApp_eCLD_ColourControl_GetRGB(&u8Red, &u8Green, &u8Blue);
+
+	vRGBLight_SetLevels(sLight.sOnOffServerCluster.bOnOff, sLight.sLevelControlServerCluster.u8CurrentLevel,u8Red,u8Green,u8Blue);
+}
+
+void vRGBLight_SetLevels(bool_t bOn, uint8 u8Level, uint8 u8Red, uint8 u8Green, uint8 u8Blue)
 {
     if (bOn == TRUE)
     {
@@ -445,24 +435,7 @@ PUBLIC void vRGBLight_SetLevels(bool_t bOn, uint8 u8Level, uint8 u8Red, uint8 u8
     vBULB_SetOnOff(bOn);
 }
 
-/****************************************************************/
-/* OS Stub functions to allow single osconfig diagram (ZLL/ZHA) */
-/* to be used for all driver variants (just clear interrupt)    */
-/****************************************************************/
 
-#ifndef DR1192
-
-OS_ISR(vISR_Timer3)
-{
-	(void) u8AHI_TimerFired(E_AHI_TIMER_3);
-}
-
-OS_ISR(vISR_Timer4)
-{
-	(void) u8AHI_TimerFired(E_AHI_TIMER_4);
-}
-
-#endif
 /****************************************************************************/
 /***        END OF FILE                                                   ***/
 /****************************************************************************/

@@ -151,37 +151,17 @@ PUBLIC void* psGetDeviceTable(void) {
  ****************************************************************************/
 PUBLIC void APP_ZCL_vInitialise(void)
 {
-	teZCL_Status eZCL_Status;
 	/* Initialise ZLL */
-	eZCL_Status = eZLL_Initialise(&APP_ZCL_cbGeneralCallback, apduZCL);
-	if (eZCL_Status != E_ZCL_SUCCESS)
-	{
-		DBG_vPrintf(TRACE_ZCL, "\nErr: eZLL_Initialise:%d", eZCL_Status);
-	}
+	eZLL_Initialise(&APP_ZCL_cbGeneralCallback, apduZCL);
+
 
 	/* Start the tick timer */
 	OS_eStartSWTimer(APP_TickTimer, ZCL_TICK_TIME, NULL);
 
-	sDeviceTable.asDeviceRecords[0].u64IEEEAddr = *((uint64*)pvAppApiGetMacAddrLocation());
 
 	/* Register Commission EndPoint */
-	eZCL_Status = eApp_ZLL_RegisterEndpoint(&APP_ZCL_cbEndpointCallback,&sCommissionEndpoint);
-	if (eZCL_Status != E_ZCL_SUCCESS)
-	{
-		DBG_vPrintf(TRACE_ZCL, "Error: eZLL_RegisterCommissionEndPoint:%d\r\n", eZCL_Status);
-	}
+	eApp_ZLL_RegisterEndpoint(&APP_ZCL_cbEndpointCallback,&sCommissionEndpoint);
 
-#ifdef CLD_COLOUR_CONTROL
-	DBG_vPrintf(TRACE_LIGHT_TASK, "Capabilities %04x\n", sLight.sColourControlServerCluster.u16ColourCapabilities);
-#endif
-
-#ifdef CLD_LEVEL_CONTROL
-	sLight.sLevelControlServerCluster.u8CurrentLevel = 0xFE;
-#endif
-
-	sLight.sOnOffServerCluster.bOnOff = TRUE;
-
-	vAPP_ZCL_DeviceSpecific_Init();
 
 #ifdef CLD_OTA
 	vAppInitOTA();
@@ -190,21 +170,7 @@ PUBLIC void APP_ZCL_vInitialise(void)
 }
 
 
-/****************************************************************************
- *
- * NAME: APP_ZCL_vSetIdentifyTime
- *
- * DESCRIPTION:
- * Sets the remaining time in the identify cluster
- *
- * RETURNS:
- * void
- *
- ****************************************************************************/
-PUBLIC void APP_ZCL_vSetIdentifyTime(uint16 u16Time)
-{
-	sLight.sIdentifyServerCluster.u16IdentifyTime = u16Time;
-}
+
 
 /****************************************************************************
  *
@@ -448,7 +414,7 @@ PRIVATE void APP_ZCL_cbEndpointCallback(tsZCL_CallBackEvent *psEvent)
 
 #elif (defined CLD_COLOUR_CONTROL) && ((defined DR1221) || (defined DR1221_Dimic))
 
-						/* controllable colour temperature tunable white (CCT TW) bulbs */
+			/* controllable colour temperature tunable white (CCT TW) bulbs */
 			vTunableWhiteLightSetLevels(sLight.sOnOffServerCluster.bOnOff,sLight.sLevelControlServerCluster.u8CurrentLevel,sLight.sColourControlServerCluster.u16ColourTemperatureMired);
 
 #elif (defined MONO_WITH_LEVEL)

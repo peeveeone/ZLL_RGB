@@ -50,12 +50,15 @@ extern tsCLD_ZllDeviceTable sDeviceTable;
 /***        Exported Functions                                            ***/
 /****************************************************************************/
 
+//generic
 PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr, tsZLL_CommissionEndpoint* psCommissionEndpoint);
 
 
-PUBLIC void vAPP_ZCL_DeviceSpecific_Init(void);
+PUBLIC void APP_ZCL_vSetIdentifyTime(uint16 u16Time);
+
 PUBLIC void vStartEffect(uint8 u8Effect);
 PUBLIC void vIdEffectTick(uint8 u8Endpoint);
+
 PUBLIC void vRGBLight_SetLevels_current();
 PUBLIC void APP_vHandleIdentify(uint16 u16Time);
 PUBLIC void vCreateInterpolationPoints( void);

@@ -113,6 +113,8 @@ PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr,
     return eZLL_RegisterDimmableLightEndPoint(LIGHT_DIMMABLELIGHT_LIGHT_00_ENDPOINT,
                                               fptr,
                                               &sLight);
+
+    vAPP_ZCL_DeviceSpecific_Init()
 }
 
 
@@ -168,6 +170,9 @@ PUBLIC uint8 u8AppGetEPId(void)
  ****************************************************************************/
 PUBLIC void vAPP_ZCL_DeviceSpecific_Init()
 {
+	sLight.sLevelControlServerCluster.u8CurrentLevel = 0xFE;
+	sLight.sOnOffServerCluster.bOnOff = TRUE;
+
     /* Initialise the strings in Basic */
     memcpy(sLight.sBasicServerCluster.au8ManufacturerName, "PeeVeeOne", CLD_BAS_MANUF_NAME_SIZE);
     memcpy(sLight.sBasicServerCluster.au8ModelIdentifier, "PeeVeeOne", CLD_BAS_MODEL_ID_SIZE);

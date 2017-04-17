@@ -65,8 +65,8 @@
 /***        Exported Variables                                            ***/
 /****************************************************************************/
 
-tsZLL_DimmableLightDevice sLight;
-tsIdentifyWhite sIdEffect;
+PRIVATE tsZLL_DimmableLightDevice sLight;
+PRIVATE tsIdentifyWhite sIdEffect;
 tsCLD_ZllDeviceTable sDeviceTable = { ZLL_NUMBER_DEVICES,
                                       {
                                           { 0,

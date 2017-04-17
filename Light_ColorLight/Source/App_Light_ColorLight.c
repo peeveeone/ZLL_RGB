@@ -47,6 +47,8 @@
 
 #include "app_light_interpolation.h"
 #include "DriverBulb_Shim.h"
+#include "ColorLight.h"
+
 
 
 
@@ -157,14 +159,6 @@ PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 u8Ep)
 	}
 }
 
-
-void vApp_eCLD_ColourControl_GetRGB(uint8 *pu8Red,uint8 *pu8Green,uint8 *pu8Blue)
-{
-	eCLD_ColourControl_GetRGB(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT,
-			pu8Red,
-			pu8Green,
-			pu8Blue);
-}
 
 
 PUBLIC void APP_ZCL_vSetIdentifyTime(uint16 u16Time)
@@ -399,24 +393,13 @@ PUBLIC void vStartEffect(uint8 u8Effect) {
 
 PUBLIC void vRGBLight_SetLevels_current(){
 
-	uint8 u8Red, u8Green, u8Blue;
+	rgb_setLevels_current(sLight);
 
-	eCLD_ColourControl_GetRGB(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT,&u8Red, &u8Green, &u8Blue);
-
-	vRGBLight_SetLevels(sLight.sOnOffServerCluster.bOnOff, sLight.sLevelControlServerCluster.u8CurrentLevel,u8Red,u8Green,u8Blue);
 }
 
 void vRGBLight_SetLevels(bool_t bOn, uint8 u8Level, uint8 u8Red, uint8 u8Green, uint8 u8Blue)
 {
-	if (bOn == TRUE)
-	{
-		vLI_Start(u8Level, u8Red, u8Green, u8Blue, 0);
-	}
-	else
-	{
-		vLI_Stop();
-	}
-	vBULB_SetOnOff(bOn);
+	rgb_setLevels( bOn,  u8Level,  u8Red,  u8Green,  u8Blue);
 }
 
 

@@ -63,7 +63,7 @@ PUBLIC void vRGBLight_SetLevels_current();
 
 
 PUBLIC void APP_vHandleIdentify();
-PUBLIC bool APP_isIdentifying();
+PUBLIC bool APP_notIdentifying();
 
 
 

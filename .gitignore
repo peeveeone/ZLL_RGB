@@ -1,18 +1,24 @@
 # Object files
+*.d
 *.o
 *.ko
 *.obj
 *.elf
 
+
 # Precompiled Headers
+
 *.gch
 *.pch
 
 # Libraries
+
+
 *.lib
 *.a
 *.la
 *.lo
+
 
 # Shared objects (inc. Windows DLLs)
 *.dll
@@ -31,3 +37,6 @@
 # Debug files
 *.dSYM/
 *.su
+
+
+

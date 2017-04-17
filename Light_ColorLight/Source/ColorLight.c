@@ -41,17 +41,15 @@ PUBLIC void rgb_setLevels(bool_t bOn, uint8 u8Level, uint8 u8Red, uint8 u8Green,
 }
 
 
-PUBLIC void rgb_handleIdentify(tsIdentifyColour *sIdEffect, tsZLL_ColourLightDevice sLight) {
+PUBLIC void rgb_handleIdentify(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sIdEffect) {
 
 	uint8 u8Red, u8Green, u8Blue;
-
-	uint16 u16Time =	sLight.sIdentifyServerCluster.u16IdentifyTime;
 
 
 	if (sIdEffect->u8Effect < E_CLD_IDENTIFY_EFFECT_STOP_EFFECT) {
 		/* do nothing */
 	}
-	else if (u16Time == 0)
+	else if (sLight.sIdentifyServerCluster.u16IdentifyTime == 0)
 	{
 		eCLD_ColourControl_GetRGB(sLight.sEndPoint.u8EndPointNumber,&u8Red, &u8Green, &u8Blue);
 
@@ -122,7 +120,7 @@ PUBLIC void rgb_startEffect(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sI
 	}
 }
 
-PUBLIC void rgb_effectTick(tsIdentifyColour *sIdEffect, tsZLL_ColourLightDevice sLight ) {
+PUBLIC void rgb_effectTick(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sIdEffect) {
 
 
 	if (sIdEffect->u8Effect < E_CLD_IDENTIFY_EFFECT_STOP_EFFECT)

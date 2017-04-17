@@ -187,7 +187,7 @@ PUBLIC bool APP_notIdentifying(){
 PUBLIC void APP_vHandleIdentify() {
 
 
-	rgb_handleIdentify(&sIdEffect, sLight);
+	rgb_handleIdentify( sLight, &sIdEffect);
 
 }
 
@@ -209,7 +209,7 @@ PUBLIC void vIdEffectTick(uint8 u8Endpoint) {
 		return;
 	}
 
-	rgb_effectTick(&sIdEffect, sLight);
+	rgb_effectTick(sLight, &sIdEffect);
 }
 
 /****************************************************************************

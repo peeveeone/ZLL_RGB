@@ -69,6 +69,13 @@ PRIVATE rgb_endpoint endpoint_01;
 
 PRIVATE rgb_endpoint *getEndpoint(uint8 epId);
 PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId);
+PRIVATE bool isEndpoint(uint8 epId);
+
+PRIVATE bool isEndpoint(uint8 epId){
+
+	return (epId == LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+
+}
 
 PRIVATE rgb_endpoint *getEndpoint(uint8 epId){
 
@@ -113,9 +120,12 @@ PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr, t
 
 PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId){
 
+	if(!isEndpoint(epId))
+		return;
+
 	rgb_endpoint* endpoint = getEndpoint(epId);
 
-	eZLL_RegisterColourLightEndPoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT,fptr, &endpoint->light);
+	eZLL_RegisterColourLightEndPoint(epId,fptr, &endpoint->light);
 
 	/* Initialise the strings in Basic */
 	memcpy(endpoint->light.sBasicServerCluster.au8ManufacturerName, "NXP", CLD_BAS_MANUF_NAME_SIZE);
@@ -132,9 +142,9 @@ PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId){
 
 
 
-PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 u8Ep)
+PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 epId)
 {
-	if (u8Ep == LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT)
+	if (isEndpoint(epId))
 	{
 		*pu16Profile = 0x0104;
 	}
@@ -142,28 +152,36 @@ PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 u8Ep)
 
 
 
-PUBLIC void APP_ZCL_vSetIdentifyTime(uint16 u16Time)
+PUBLIC void APP_ZCL_vSetIdentifyTime(uint8 epId, uint16 u16Time)
 {
+	if(!isEndpoint(epId))
+		return;
 
-	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+	rgb_endpoint* endpoint = getEndpoint(epId);
 
 	endpoint->light.sIdentifyServerCluster.u16IdentifyTime = u16Time;
 }
 
 
 
-PUBLIC bool APP_notIdentifying(){
+PUBLIC bool APP_notIdentifying(uint8 epId){
 
-	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+	if(!isEndpoint(epId))
+		return FALSE;
+
+	rgb_endpoint* endpoint = getEndpoint(epId);
 
 	return	endpoint->light.sIdentifyServerCluster.u16IdentifyTime == 0;
 }
 
 
 
-PUBLIC void APP_vHandleIdentify() {
+PUBLIC void APP_vHandleIdentify(uint8 epId) {
 
-	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+	if(!isEndpoint(epId))
+		return;
+
+	rgb_endpoint* endpoint = getEndpoint(epId);
 
 	rgb_handleIdentify( endpoint->light, &endpoint->effect);
 
@@ -172,9 +190,8 @@ PUBLIC void APP_vHandleIdentify() {
 
 PUBLIC void vIdEffectTick(uint8 epId) {
 
-	if (epId != LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT) {
+	if(!isEndpoint(epId))
 		return;
-	}
 
 	rgb_endpoint* endpoint = getEndpoint(epId);
 
@@ -182,19 +199,24 @@ PUBLIC void vIdEffectTick(uint8 epId) {
 }
 
 
-PUBLIC void vStartEffect(uint8 u8Effect) {
+PUBLIC void vStartEffect(uint8 epId, uint8 u8Effect) {
 
-	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+	if(!isEndpoint(epId))
+		return;
+
+	rgb_endpoint* endpoint = getEndpoint(epId);
 
 	rgb_startEffect(endpoint->light, &endpoint->effect, u8Effect);
 }
 
 
 
+PUBLIC void vRGBLight_SetLevels_current(uint8 epId){
 
-PUBLIC void vRGBLight_SetLevels_current(){
+	if(!isEndpoint(epId))
+		return;
 
-	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+	rgb_endpoint* endpoint = getEndpoint(epId);
 
 	rgb_setLevels_current(endpoint->light);
 

@@ -410,7 +410,7 @@ PRIVATE void APP_ZCL_cbEndpointCallback(tsZCL_CallBackEvent *psEvent)
 
 #if (defined CLD_COLOUR_CONTROL) && !(defined DR1221) && !(defined DR1221_Dimic)
 
-			vRGBLight_SetLevels_current();
+			vRGBLight_SetLevels_current(psEvent->u8EndPoint);
 
 #elif (defined CLD_COLOUR_CONTROL) && ((defined DR1221) || (defined DR1221_Dimic))
 
@@ -435,10 +435,10 @@ PRIVATE void APP_ZCL_cbEndpointCallback(tsZCL_CallBackEvent *psEvent)
 			tsCLD_IdentifyCallBackMessage *psCallBackMessage = (tsCLD_IdentifyCallBackMessage*)psEvent->uMessage.sClusterCustomMessage.pvCustomData;
 			if (psCallBackMessage->u8CommandId == E_CLD_IDENTIFY_CMD_TRIGGER_EFFECT) {
 				DBG_vPrintf(TRACE_LIGHT_TASK, "Identify Cust CB %d\n", psCallBackMessage->uMessage.psTriggerEffectRequestPayload->eEffectId);
-				vStartEffect(psCallBackMessage->uMessage.psTriggerEffectRequestPayload->eEffectId);
+				vStartEffect(psEvent->u8EndPoint, psCallBackMessage->uMessage.psTriggerEffectRequestPayload->eEffectId);
 			} else if (psCallBackMessage->u8CommandId == E_CLD_IDENTIFY_CMD_IDENTIFY) {
 				DBG_vPrintf(TRACE_PATH, "\nJP E_CLD_IDENTIFY_CMD_IDENTIFY");
-				APP_vHandleIdentify();
+				APP_vHandleIdentify(psEvent->u8EndPoint);
 			}
 		}
 		break;
@@ -467,18 +467,18 @@ PRIVATE void APP_ZCL_cbEndpointCallback(tsZCL_CallBackEvent *psEvent)
 			}
 			else if (psEvent->psClusterInstance->psClusterDefinition->u16ClusterEnum == GENERAL_CLUSTER_ID_IDENTIFY)
 			{
-				APP_vHandleIdentify();
+				APP_vHandleIdentify(psEvent->u8EndPoint);
 			}
 			else
 			{
-				if (APP_notIdentifying()) {
+				if (APP_notIdentifying(psEvent->u8EndPoint)) {
 					/*
 					 * If not identifying then do the light
 					 */
 					//DBG_vPrintf(TRACE_PATH, "\nPath 2");
 #if (defined CLD_COLOUR_CONTROL) && !(defined DR1221) && !(defined DR1221_Dimic)
 
-					vRGBLight_SetLevels_current();
+					vRGBLight_SetLevels_current(psEvent->u8EndPoint);
 
 #elif (defined CLD_COLOUR_CONTROL) && ((defined DR1221) || (defined DR1221_Dimic))
 					/* controllable colour temperature tunable white (CCT TW) bulbs */

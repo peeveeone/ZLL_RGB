@@ -307,9 +307,12 @@ OS_TASK(APP_Commission_Task) {
                                     sEvent.sZllMessage.uPayload.sIdentifyReqPayload.u16Duration = 3;
                                 }
 
-                                /** Identfiy time goes at 1Hz **/
-                                APP_ZCL_vSetIdentifyTime( sEvent.sZllMessage.uPayload.sIdentifyReqPayload.u16Duration);
-                                APP_vHandleIdentify(  sEvent.sZllMessage.uPayload.sIdentifyReqPayload.u16Duration);
+
+                                //PV1: No identify, we cannot determine the endpoint Id here, introduce global func when required:
+
+//                                /** Identfiy time goes at 1Hz **/
+//                                APP_ZCL_vSetIdentifyTime(sEvent->u8EndPoint, sEvent.sZllMessage.uPayload.sIdentifyReqPayload.u16Duration);
+//                                APP_vHandleIdentify(  sEvent.sZllMessage.uPayload.sIdentifyReqPayload.u16Duration);
                                 break;
 
                             case E_CLD_COMMISSION_CMD_DEVICE_INFO_REQ:

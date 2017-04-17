@@ -54,16 +54,16 @@ extern tsCLD_ZllDeviceTable sDeviceTable;
 PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr, tsZLL_CommissionEndpoint* psCommissionEndpoint);
 
 
-PUBLIC void APP_ZCL_vSetIdentifyTime(uint16 u16Time);
+PUBLIC void APP_ZCL_vSetIdentifyTime(uint8 epId, uint16 u16Time);
 
-PUBLIC void vStartEffect(uint8 u8Effect);
-PUBLIC void vIdEffectTick(uint8 u8Endpoint);
+PUBLIC void vStartEffect(uint8 epId, uint8 u8Effect);
+PUBLIC void vIdEffectTick(uint8 epId);
 
-PUBLIC void vRGBLight_SetLevels_current();
+PUBLIC void vRGBLight_SetLevels_current(uint8 epId);
 
 
-PUBLIC void APP_vHandleIdentify();
-PUBLIC bool APP_notIdentifying();
+PUBLIC void APP_vHandleIdentify(uint8 epId);
+PUBLIC bool APP_notIdentifying(uint8 epId);
 
 
 

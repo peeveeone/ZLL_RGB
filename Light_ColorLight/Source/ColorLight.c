@@ -73,7 +73,9 @@ PUBLIC void rgb_startEffect(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sI
 		sIdEffect->u8Green = 0;
 		sIdEffect->u8Blue = 0;
 		sIdEffect->bFinish = FALSE;
-		APP_ZCL_vSetIdentifyTime(2);
+
+		sLight.sIdentifyServerCluster.u16IdentifyTime = 2;
+
 		sIdEffect->u8Tick = 10;
 		break;
 	case E_CLD_IDENTIFY_EFFECT_BREATHE:
@@ -83,7 +85,9 @@ PUBLIC void rgb_startEffect(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sI
 		sIdEffect->u8Level = 0;
 		sIdEffect->u8Count = 15;
 		eCLD_ColourControl_GetRGB( sLight.sEndPoint.u8EndPointNumber, &sIdEffect->u8Red, &sIdEffect->u8Green, &sIdEffect->u8Blue);
-		APP_ZCL_vSetIdentifyTime(17);
+
+		sLight.sIdentifyServerCluster.u16IdentifyTime = 17;
+
 		sIdEffect->u8Tick = 200;
 		break;
 	case E_CLD_IDENTIFY_EFFECT_OKAY:
@@ -93,7 +97,9 @@ PUBLIC void rgb_startEffect(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sI
 		sIdEffect->u8Red = 0;
 		sIdEffect->u8Green = 255;
 		sIdEffect->u8Blue = 0;
-		APP_ZCL_vSetIdentifyTime(2);
+
+		sLight.sIdentifyServerCluster.u16IdentifyTime = 2;
+
 		sIdEffect->u8Tick = 10;
 		break;
 	case E_CLD_IDENTIFY_EFFECT_CHANNEL_CHANGE:
@@ -103,7 +109,8 @@ PUBLIC void rgb_startEffect(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sI
 		sIdEffect->u8Green = 127;
 		sIdEffect->u8Blue = 4;
 		sIdEffect->bFinish = FALSE;
-		APP_ZCL_vSetIdentifyTime(9);
+
+		sLight.sIdentifyServerCluster.u16IdentifyTime = 9;
 		sIdEffect->u8Tick = 80;
 		break;
 
@@ -115,7 +122,7 @@ PUBLIC void rgb_startEffect(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sI
 		break;
 	case E_CLD_IDENTIFY_EFFECT_STOP_EFFECT:
 		sIdEffect->u8Effect = E_CLD_IDENTIFY_EFFECT_STOP_EFFECT;
-		APP_ZCL_vSetIdentifyTime(1);
+		sLight.sIdentifyServerCluster.u16IdentifyTime = 1;
 		break;
 	}
 }
@@ -170,7 +177,8 @@ PUBLIC void rgb_effectTick(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sId
 
 			sIdEffect->u8Effect = E_CLD_IDENTIFY_EFFECT_STOP_EFFECT;
 			sIdEffect->bDirection = FALSE;
-			APP_ZCL_vSetIdentifyTime(0);
+			sLight.sIdentifyServerCluster.u16IdentifyTime = 0;
+
 			uint8 u8Red, u8Green, u8Blue;
 
 			eCLD_ColourControl_GetRGB(sLight.sEndPoint.u8EndPointNumber,&u8Red, &u8Green, &u8Blue);

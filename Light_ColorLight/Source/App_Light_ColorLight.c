@@ -157,24 +157,8 @@ PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 u8Ep)
 	}
 }
 
-/****************************************************************************
- *
- * NAME: vApp_eCLD_ColourControl_GetRGB
- *
- * DESCRIPTION:
- * To get RGB value
- *
- * PARAMETER
- * Type                   Name                    Descirption
- * uint8 *                pu8Red                  Pointer to Red in RGB value
- * uint8 *                pu8Green                Pointer to Green in RGB value
- * uint8 *                pu8Blue                 Pointer to Blue in RGB value
- *
- * RETURNS:
- * teZCL_Status
- *
- ****************************************************************************/
-PUBLIC void vApp_eCLD_ColourControl_GetRGB(uint8 *pu8Red,uint8 *pu8Green,uint8 *pu8Blue)
+
+void vApp_eCLD_ColourControl_GetRGB(uint8 *pu8Red,uint8 *pu8Green,uint8 *pu8Blue)
 {
 	eCLD_ColourControl_GetRGB(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT,
 			pu8Red,
@@ -183,17 +167,6 @@ PUBLIC void vApp_eCLD_ColourControl_GetRGB(uint8 *pu8Red,uint8 *pu8Green,uint8 *
 }
 
 
-/****************************************************************************
- *
- * NAME: APP_ZCL_vSetIdentifyTime
- *
- * DESCRIPTION:
- * Sets the remaining time in the identify cluster
- *
- * RETURNS:
- * void
- *
- ****************************************************************************/
 PUBLIC void APP_ZCL_vSetIdentifyTime(uint16 u16Time)
 {
 	sLight.sIdentifyServerCluster.u16IdentifyTime = u16Time;
@@ -237,17 +210,11 @@ PUBLIC void APP_vHandleIdentify() {
 		 */
 
 
-		vApp_eCLD_ColourControl_GetRGB(&u8Red, &u8Green, &u8Blue);
+		eCLD_ColourControl_GetRGB(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT,&u8Red, &u8Green, &u8Blue);
 
 
 
-
-
-		vRGBLight_SetLevels(sLight.sOnOffServerCluster.bOnOff,
-				sLight.sLevelControlServerCluster.u8CurrentLevel,
-				u8Red,
-				u8Green,
-				u8Blue);
+		vRGBLight_SetLevels(sLight.sOnOffServerCluster.bOnOff,sLight.sLevelControlServerCluster.u8CurrentLevel,u8Red,u8Green,u8Blue);
 	}
 	else
 	{
@@ -328,7 +295,9 @@ PUBLIC void vIdEffectTick(uint8 u8Endpoint) {
 			sIdEffect.bDirection = FALSE;
 			APP_ZCL_vSetIdentifyTime(0);
 			uint8 u8Red, u8Green, u8Blue;
-			vApp_eCLD_ColourControl_GetRGB(&u8Red, &u8Green, &u8Blue);
+
+			eCLD_ColourControl_GetRGB(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT,&u8Red, &u8Green, &u8Blue);
+
 			DBG_vPrintf(TRACE_LIGHT_TASK, "EF - R %d G %d B %d L %d Hue %d Sat %d\n",
 					u8Red,
 					u8Green,
@@ -432,7 +401,7 @@ PUBLIC void vRGBLight_SetLevels_current(){
 
 	uint8 u8Red, u8Green, u8Blue;
 
-	vApp_eCLD_ColourControl_GetRGB(&u8Red, &u8Green, &u8Blue);
+	eCLD_ColourControl_GetRGB(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT,&u8Red, &u8Green, &u8Blue);
 
 	vRGBLight_SetLevels(sLight.sOnOffServerCluster.bOnOff, sLight.sLevelControlServerCluster.u8CurrentLevel,u8Red,u8Green,u8Blue);
 }

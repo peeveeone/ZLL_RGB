@@ -45,10 +45,10 @@
 #include "dbg.h"
 #include <string.h>
 
-#include "app_light_interpolation.h"
+
 #include "DriverBulb_Shim.h"
 #include "ColorLight.h"
-
+#include "Interpolate.h"
 
 
 
@@ -65,7 +65,14 @@
 #endif
 
 
-PRIVATE rgb_endpoint endpoint_01;
+PRIVATE rgb_endpoint endpoint_01 = {
+		.vars.sLevel.i32Delta   = 0,
+		.vars.sRed.i32Delta     = 0,
+		.vars.sGreen.i32Delta   = 0,
+		.vars.sBlue.i32Delta    = 0,
+		.vars.sColTemp.i32Delta = 0,
+		.vars.u32PointsAdded  = INTPOINTS
+};
 
 PRIVATE rgb_endpoint *getEndpoint(uint8 epId);
 PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId);
@@ -123,7 +130,12 @@ PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId){
 	if(!isEndpoint(epId))
 		return;
 
+
 	rgb_endpoint* endpoint = getEndpoint(epId);
+
+
+	ip_setCurrentValues(&endpoint->vars, CLD_LEVELCONTROL_MAX_LEVEL ,255,255,255,4000);
+
 
 	eZLL_RegisterColourLightEndPoint(epId,fptr, &endpoint->light);
 
@@ -183,7 +195,7 @@ PUBLIC void APP_vHandleIdentify(uint8 epId) {
 
 	rgb_endpoint* endpoint = getEndpoint(epId);
 
-	rgb_handleIdentify( endpoint->light, &endpoint->effect);
+	rgb_handleIdentify( endpoint->light, &endpoint->effect, &endpoint->vars);
 
 }
 
@@ -195,7 +207,7 @@ PUBLIC void vIdEffectTick(uint8 epId) {
 
 	rgb_endpoint* endpoint = getEndpoint(epId);
 
-	rgb_effectTick(endpoint->light, &endpoint->effect);
+	rgb_effectTick(endpoint->light, &endpoint->effect, &endpoint->vars);
 }
 
 
@@ -218,10 +230,23 @@ PUBLIC void vRGBLight_SetLevels_current(uint8 epId){
 
 	rgb_endpoint* endpoint = getEndpoint(epId);
 
-	rgb_setLevels_current(endpoint->light);
+	rgb_setLevels_current(endpoint->light, &endpoint->vars);
 
 }
 
+
+PUBLIC void vCreateInterpolationPoints( void){
+
+	// iterate all ep's
+	if(!isEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT))
+			return;
+
+	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+
+
+	ip_createPoints(&endpoint->vars);
+
+}
 
 
 

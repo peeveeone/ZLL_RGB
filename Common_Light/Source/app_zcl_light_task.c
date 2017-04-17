@@ -72,7 +72,6 @@
 #include "zps_gen.h"
 
 #include "app_events.h"
-#include "app_light_interpolation.h"
 #include "DriverBulb.h"
 
 #include <string.h>
@@ -205,7 +204,9 @@ OS_TASK(Tick_Task)
 #if ( defined CLD_LEVEL_CONTROL) && !(defined MONO_ON_OFF)  /* add in nine 10ms interpolation points */
 	else
 	{
-		vLI_CreatePoints();
+		// Here the output is set:
+
+		vCreateInterpolationPoints();
 	}
 #endif
 

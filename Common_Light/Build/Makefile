@@ -203,11 +203,12 @@ APPSRC += app_zcl_light_task.c
 APPSRC += app_light_commission_task.c
 
 APPSRC += ColorLight.c
+APPSRC += Interpolate.c
 
 ifeq ($(OTA),1)
 APPSRC += app_ota_client.c
 endif
-APPSRC += app_light_interpolation.c
+
 APPSRC += appZpsBeaconHandler.c
 
 #Light device type and it's associated driver 

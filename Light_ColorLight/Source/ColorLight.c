@@ -13,35 +13,37 @@
 #include "app_zcl_light_task.h"
 #include "dbg.h"
 #include <string.h>
-
-#include "app_light_interpolation.h"
 #include "DriverBulb_Shim.h"
 #include "ColorLight.h"
+#include "Interpolate.h"
 
-PUBLIC void rgb_setLevels_current(tsZLL_ColourLightDevice light){
+PUBLIC void rgb_setLevels_current(tsZLL_ColourLightDevice light, tsLI_Vars* vars){
 
 	uint8 u8Red, u8Green, u8Blue;
 
 	eCLD_ColourControl_GetRGB(light.sEndPoint.u8EndPointNumber,&u8Red, &u8Green, &u8Blue);
 
-	rgb_setLevels(light.sOnOffServerCluster.bOnOff, light.sLevelControlServerCluster.u8CurrentLevel,u8Red,u8Green,u8Blue);
+	rgb_setLevels(vars, light.sOnOffServerCluster.bOnOff, light.sLevelControlServerCluster.u8CurrentLevel,u8Red,u8Green,u8Blue);
 }
 
-PUBLIC void rgb_setLevels(bool_t bOn, uint8 u8Level, uint8 u8Red, uint8 u8Green, uint8 u8Blue)
+PUBLIC void rgb_setLevels(tsLI_Vars* vars, bool_t bOn, uint8 u8Level, uint8 u8Red, uint8 u8Green, uint8 u8Blue)
 {
 	if (bOn == TRUE)
 	{
-		vLI_Start(u8Level, u8Red, u8Green, u8Blue, 0);
+		ip_start(vars,u8Level, u8Red, u8Green, u8Blue, 0 );
+
 	}
 	else
 	{
-		vLI_Stop();
+		ip_stop(vars);
+
 	}
+
 	vBULB_SetOnOff(bOn);
 }
 
 
-PUBLIC void rgb_handleIdentify(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sIdEffect) {
+PUBLIC void rgb_handleIdentify(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sIdEffect, tsLI_Vars* vars) {
 
 	uint8 u8Red, u8Green, u8Blue;
 
@@ -53,13 +55,13 @@ PUBLIC void rgb_handleIdentify(tsZLL_ColourLightDevice sLight, tsIdentifyColour 
 	{
 		eCLD_ColourControl_GetRGB(sLight.sEndPoint.u8EndPointNumber,&u8Red, &u8Green, &u8Blue);
 
-		rgb_setLevels(sLight.sOnOffServerCluster.bOnOff,sLight.sLevelControlServerCluster.u8CurrentLevel,u8Red,u8Green,u8Blue);
+		rgb_setLevels(vars, sLight.sOnOffServerCluster.bOnOff,sLight.sLevelControlServerCluster.u8CurrentLevel,u8Red,u8Green,u8Blue);
 	}
 	else
 	{
 		/* Set the Identify levels */
 
-		rgb_setLevels(TRUE, 159, 250, 0, 0);
+		rgb_setLevels(vars, TRUE, 159, 250, 0, 0);
 	}
 }
 
@@ -127,7 +129,7 @@ PUBLIC void rgb_startEffect(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sI
 	}
 }
 
-PUBLIC void rgb_effectTick(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sIdEffect) {
+PUBLIC void rgb_effectTick(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sIdEffect, tsLI_Vars* vars) {
 
 
 	if (sIdEffect->u8Effect < E_CLD_IDENTIFY_EFFECT_STOP_EFFECT)
@@ -137,7 +139,7 @@ PUBLIC void rgb_effectTick(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sId
 
 			sIdEffect->u8Tick--;
 			/* Set the light parameters */
-			rgb_setLevels(TRUE, sIdEffect->u8Level,sIdEffect->u8Red,sIdEffect->u8Green,sIdEffect->u8Blue);
+			rgb_setLevels(vars, TRUE, sIdEffect->u8Level,sIdEffect->u8Red,sIdEffect->u8Green,sIdEffect->u8Blue);
 			/* Now adjust parameters ready for for next round */
 			switch (sIdEffect->u8Effect) {
 			case E_CLD_IDENTIFY_EFFECT_BLINK:
@@ -183,7 +185,7 @@ PUBLIC void rgb_effectTick(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sId
 
 			eCLD_ColourControl_GetRGB(sLight.sEndPoint.u8EndPointNumber,&u8Red, &u8Green, &u8Blue);
 
-			rgb_setLevels(sLight.sOnOffServerCluster.bOnOff,
+			rgb_setLevels(vars, sLight.sOnOffServerCluster.bOnOff,
 					sLight.sLevelControlServerCluster.u8CurrentLevel,
 					u8Red,
 					u8Green,
@@ -191,3 +193,6 @@ PUBLIC void rgb_effectTick(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sId
 		}
 	}
 }
+
+
+

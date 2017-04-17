@@ -61,7 +61,7 @@
 #include "zcl_options.h"
 
 #include "app_common.h"
-#include "app_light_interpolation.h"
+
 
 #include "DriverBulb_Shim.h"
 
@@ -191,11 +191,7 @@ PUBLIC void vAppMain(void)
 
     vBULB_Init();
 
-    /* Bulb is now on 100% white (RGB or Mono) so ensure the LI     */
-    /*  module's values are consistent with this initial state      */
-#ifndef MONO_ON_OFF
-     vLI_SetCurrentValues(CLD_LEVELCONTROL_MAX_LEVEL ,255,255,255,4000 );
-#endif
+
 
     g_u8ZpsExpiryMaxCount = 1;
     /* Initialise the debug diagnostics module to use UART0 at 115K Baud;

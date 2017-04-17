@@ -43,7 +43,7 @@
 /***        External Variables                                            ***/
 /****************************************************************************/
 
-extern tsZLL_ColourLightDevice sLight;
+
 extern tsCLD_ZllDeviceTable sDeviceTable;
 
 /****************************************************************************/
@@ -60,7 +60,13 @@ PUBLIC void vStartEffect(uint8 u8Effect);
 PUBLIC void vIdEffectTick(uint8 u8Endpoint);
 
 PUBLIC void vRGBLight_SetLevels_current();
-PUBLIC void APP_vHandleIdentify(uint16 u16Time);
+
+
+PUBLIC void APP_vHandleIdentify();
+PUBLIC bool APP_isIdentifying();
+
+
+
 PUBLIC void vCreateInterpolationPoints( void);
 
 /****************************************************************************/

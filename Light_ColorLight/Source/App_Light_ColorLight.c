@@ -68,8 +68,9 @@
 /***        Exported Variables                                            ***/
 /****************************************************************************/
 
-tsZLL_ColourLightDevice sLight;
-tsIdentifyColour sIdEffect;
+PRIVATE tsZLL_ColourLightDevice sLight;
+PRIVATE tsIdentifyColour sIdEffect;
+
 tsCLD_ZllDeviceTable sDeviceTable = { ZLL_NUMBER_DEVICES,
 		{
 				{ 0,
@@ -200,6 +201,12 @@ PUBLIC void APP_ZCL_vSetIdentifyTime(uint16 u16Time)
 
 
 
+PUBLIC bool APP_notIdentifying(){
+
+	return	sLight.sIdentifyServerCluster.u16IdentifyTime == 0;
+}
+
+
 /****************************************************************************
  *
  * NAME: APP_vHandleIdentify
@@ -212,9 +219,11 @@ PUBLIC void APP_ZCL_vSetIdentifyTime(uint16 u16Time)
  * RETURNS: void
  *
  ****************************************************************************/
-PUBLIC void APP_vHandleIdentify(uint16 u16Time) {
+PUBLIC void APP_vHandleIdentify() {
 
 	uint8 u8Red, u8Green, u8Blue;
+
+	uint16 u16Time =	sLight.sIdentifyServerCluster.u16IdentifyTime;
 
 	DBG_vPrintf(TRACE_LIGHT_TASK, "JP Time %d\n", u16Time);
 

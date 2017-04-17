@@ -438,7 +438,7 @@ PRIVATE void APP_ZCL_cbEndpointCallback(tsZCL_CallBackEvent *psEvent)
 				vStartEffect(psCallBackMessage->uMessage.psTriggerEffectRequestPayload->eEffectId);
 			} else if (psCallBackMessage->u8CommandId == E_CLD_IDENTIFY_CMD_IDENTIFY) {
 				DBG_vPrintf(TRACE_PATH, "\nJP E_CLD_IDENTIFY_CMD_IDENTIFY");
-				APP_vHandleIdentify(sLight.sIdentifyServerCluster.u16IdentifyTime);
+				APP_vHandleIdentify();
 			}
 		}
 		break;
@@ -467,11 +467,11 @@ PRIVATE void APP_ZCL_cbEndpointCallback(tsZCL_CallBackEvent *psEvent)
 			}
 			else if (psEvent->psClusterInstance->psClusterDefinition->u16ClusterEnum == GENERAL_CLUSTER_ID_IDENTIFY)
 			{
-				APP_vHandleIdentify(sLight.sIdentifyServerCluster.u16IdentifyTime);
+				APP_vHandleIdentify();
 			}
 			else
 			{
-				if (sLight.sIdentifyServerCluster.u16IdentifyTime == 0) {
+				if (APP_notIdentifying()) {
 					/*
 					 * If not identifying then do the light
 					 */

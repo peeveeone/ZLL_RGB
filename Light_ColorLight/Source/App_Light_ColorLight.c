@@ -65,13 +65,11 @@
 #endif
 
 
+PRIVATE rgb_endpoint endpoint;
 
-/****************************************************************************/
-/***        Exported Variables                                            ***/
-/****************************************************************************/
 
-PRIVATE tsZLL_ColourLightDevice sLight;
-PRIVATE tsIdentifyColour sIdEffect;
+//PRIVATE tsZLL_ColourLightDevice endpoint.light;
+//PRIVATE tsIdentifyColour sIdEffect;
 
 tsCLD_ZllDeviceTable sDeviceTable = { ZLL_NUMBER_DEVICES,
 		{
@@ -86,29 +84,10 @@ tsCLD_ZllDeviceTable sDeviceTable = { ZLL_NUMBER_DEVICES,
 };
 
 
-/****************************************************************************/
-/***        Exported Functions                                            ***/
-/****************************************************************************/
+
 PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 u8Ep);
 
 
-/****************************************************************************
- **
- ** NAME: eApp_ZLL_RegisterEndpoint
- **
- ** DESCRIPTION:
- ** Register ZLL endpoints
- **
- ** PARAMETER
- ** Type                                Name                    Descirption
- ** tfpZCL_ZCLCallBackFunction            fptr                    Pointer to ZCL Callback function
- ** tsZLL_CommissionEndpoint            psCommissionEndpoint    Pointer to Commission Endpoint
- **
- **
- ** RETURNS:
- ** teZCL_Status
- *
- ****************************************************************************/
 PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr, tsZLL_CommissionEndpoint* psCommissionEndpoint)
 {
 	sDeviceTable.asDeviceRecords[0].u64IEEEAddr = *((uint64*)pvAppApiGetMacAddrLocation());
@@ -118,37 +97,24 @@ PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr, t
 
 	eZLL_RegisterCommissionEndPoint(LIGHT_COLORLIGHT_COMMISSION_ENDPOINT,fptr,psCommissionEndpoint);
 
-	eZLL_RegisterColourLightEndPoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT,fptr,&sLight);
+	eZLL_RegisterColourLightEndPoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT,fptr,&endpoint.light);
 
 	/* Initialise the strings in Basic */
-	memcpy(sLight.sBasicServerCluster.au8ManufacturerName, "NXP", CLD_BAS_MANUF_NAME_SIZE);
-	memcpy(sLight.sBasicServerCluster.au8ModelIdentifier, "ZLL-ColorLight", CLD_BAS_MODEL_ID_SIZE);
-	memcpy(sLight.sBasicServerCluster.au8DateCode, "20150212", CLD_BAS_DATE_SIZE);
-	memcpy(sLight.sBasicServerCluster.au8SWBuildID, "1000-0003", CLD_BAS_SW_BUILD_SIZE);
+	memcpy(endpoint.light.sBasicServerCluster.au8ManufacturerName, "NXP", CLD_BAS_MANUF_NAME_SIZE);
+	memcpy(endpoint.light.sBasicServerCluster.au8ModelIdentifier, "ZLL-ColorLight", CLD_BAS_MODEL_ID_SIZE);
+	memcpy(endpoint.light.sBasicServerCluster.au8DateCode, "20150212", CLD_BAS_DATE_SIZE);
+	memcpy(endpoint.light.sBasicServerCluster.au8SWBuildID, "1000-0003", CLD_BAS_SW_BUILD_SIZE);
 
-	sLight.sLevelControlServerCluster.u8CurrentLevel = 0xFF;
-	sLight.sOnOffServerCluster.bOnOff = TRUE;
-	sIdEffect.u8Effect = E_CLD_IDENTIFY_EFFECT_STOP_EFFECT;
-	sIdEffect.u8Tick = 0;
+	endpoint.light.sLevelControlServerCluster.u8CurrentLevel = 0xFF;
+	endpoint.light.sOnOffServerCluster.bOnOff = TRUE;
+	endpoint.effect.u8Effect = E_CLD_IDENTIFY_EFFECT_STOP_EFFECT;
+	endpoint.effect.u8Tick = 0;
 
 	return E_ZCL_SUCCESS;
 }
 
 
-/****************************************************************************
- *
- * NAME: vOverideProfileId
- *
- * DESCRIPTION: Allows the application to over ride the profile in the
- * simple descriptor (0xc05e) with the ZHA profile id (0x0104)
- * required for on air packets
- *
- *
- * PARAMETER: pointer to the profile  to be used, the end point sending the data
- *
- * RETURNS: void
- *
- ****************************************************************************/
+
 PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 u8Ep)
 {
 	if (u8Ep == LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT)
@@ -161,90 +127,47 @@ PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 u8Ep)
 
 PUBLIC void APP_ZCL_vSetIdentifyTime(uint16 u16Time)
 {
-	sLight.sIdentifyServerCluster.u16IdentifyTime = u16Time;
+	endpoint.light.sIdentifyServerCluster.u16IdentifyTime = u16Time;
 }
 
 
 
 PUBLIC bool APP_notIdentifying(){
 
-	return	sLight.sIdentifyServerCluster.u16IdentifyTime == 0;
+	return	endpoint.light.sIdentifyServerCluster.u16IdentifyTime == 0;
 }
 
 
-/****************************************************************************
- *
- * NAME: APP_vHandleIdentify
- *
- * DESCRIPTION:
- * ZLL Device Specific identify
- *
- * PARAMETER: the identify time
- *
- * RETURNS: void
- *
- ****************************************************************************/
+
 PUBLIC void APP_vHandleIdentify() {
 
 
-	rgb_handleIdentify( sLight, &sIdEffect);
+	rgb_handleIdentify( endpoint.light, &endpoint.effect);
 
 }
 
-/****************************************************************************
- *
- * NAME: vIdEffectTick
- *
- * DESCRIPTION:
- * ZLL Device Specific identify tick
- *
- * PARAMETER: void
- *
- * RETURNS: void
- *
- ****************************************************************************/
+
 PUBLIC void vIdEffectTick(uint8 u8Endpoint) {
 
 	if (u8Endpoint != LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT) {
 		return;
 	}
 
-	rgb_effectTick(sLight, &sIdEffect);
+	rgb_effectTick(endpoint.light, &endpoint.effect);
 }
 
-/****************************************************************************
- *
- * NAME: vStartEffect
- *
- * DESCRIPTION:
- * ZLL Device Specific identify effect set up
- *
- * PARAMETER: void
- *
- * RETURNS: void
- *
- ****************************************************************************/
+
 PUBLIC void vStartEffect(uint8 u8Effect) {
 
-	rgb_startEffect(sLight, &sIdEffect, u8Effect);
+	rgb_startEffect(endpoint.light, &endpoint.effect, u8Effect);
 }
 
 
-/****************************************************************************
- *
- * NAME: vRGBLight_SetLevels
- *
- * DESCRIPTION:
- * Set the RGB and levels
- *
- * RETURNS:
- * void
- *
- ****************************************************************************/
+
 
 PUBLIC void vRGBLight_SetLevels_current(){
 
-	rgb_setLevels_current(sLight);
+	rgb_setLevels_current(endpoint.light);
 
 }
 

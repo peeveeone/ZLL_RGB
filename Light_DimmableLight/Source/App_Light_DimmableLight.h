@@ -43,8 +43,8 @@
 /***        External Variables                                            ***/
 /****************************************************************************/
 
-extern tsZLL_DimmableLightDevice sLight;
-extern tsCLD_ZllDeviceTable sDeviceTable;
+//extern tsZLL_DimmableLightDevice sLight;
+//extern tsCLD_ZllDeviceTable sDeviceTable;
 
 /****************************************************************************/
 /***        Exported Functions                                            ***/

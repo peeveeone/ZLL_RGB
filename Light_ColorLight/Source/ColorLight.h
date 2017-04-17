@@ -9,6 +9,14 @@
 #define COLORLIGHT_H_
 
 
+typedef struct
+{
+	tsZLL_ColourLightDevice light;
+	tsIdentifyColour effect;
+
+}rgb_endpoint;
+
+
 
 PUBLIC void rgb_setLevels_current(tsZLL_ColourLightDevice light);
 

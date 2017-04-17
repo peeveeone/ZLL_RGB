@@ -180,7 +180,7 @@ PUBLIC void vLoadScenesNVM(void);
 #define CLD_BAS_MODEL_ID_SIZE       (16)
 #define CLD_BAS_DATE_SIZE           (8)
 #define CLD_BAS_POWER_SOURCE        E_CLD_BAS_PS_SINGLE_PHASE_MAINS
-#define CLD_BAS_SW_BUILD_SIZE       (9)
+#define CLD_BAS_SW_BUILD_SIZE       (12)
 
 
 #define CLD_IDENTIFY_SUPPORT_ZLL_ENHANCED_COMMANDS

@@ -65,11 +65,18 @@
 #endif
 
 
-PRIVATE rgb_endpoint endpoint;
+PRIVATE rgb_endpoint endpoint_01;
+
+PRIVATE rgb_endpoint *getEndpoint(uint8 epId);
+PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId);
+
+PRIVATE rgb_endpoint *getEndpoint(uint8 epId){
+
+	return &endpoint_01;
+}
 
 
-//PRIVATE tsZLL_ColourLightDevice endpoint.light;
-//PRIVATE tsIdentifyColour sIdEffect;
+
 
 tsCLD_ZllDeviceTable sDeviceTable = { ZLL_NUMBER_DEVICES,
 		{
@@ -97,20 +104,30 @@ PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr, t
 
 	eZLL_RegisterCommissionEndPoint(LIGHT_COLORLIGHT_COMMISSION_ENDPOINT,fptr,psCommissionEndpoint);
 
-	eZLL_RegisterColourLightEndPoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT,fptr,&endpoint.light);
 
-	/* Initialise the strings in Basic */
-	memcpy(endpoint.light.sBasicServerCluster.au8ManufacturerName, "NXP", CLD_BAS_MANUF_NAME_SIZE);
-	memcpy(endpoint.light.sBasicServerCluster.au8ModelIdentifier, "ZLL-ColorLight", CLD_BAS_MODEL_ID_SIZE);
-	memcpy(endpoint.light.sBasicServerCluster.au8DateCode, "20150212", CLD_BAS_DATE_SIZE);
-	memcpy(endpoint.light.sBasicServerCluster.au8SWBuildID, "1000-0003", CLD_BAS_SW_BUILD_SIZE);
+	registerEndpoint(fptr, LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
 
-	endpoint.light.sLevelControlServerCluster.u8CurrentLevel = 0xFF;
-	endpoint.light.sOnOffServerCluster.bOnOff = TRUE;
-	endpoint.effect.u8Effect = E_CLD_IDENTIFY_EFFECT_STOP_EFFECT;
-	endpoint.effect.u8Tick = 0;
 
 	return E_ZCL_SUCCESS;
+}
+
+PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId){
+
+	rgb_endpoint* endpoint = getEndpoint(epId);
+
+	eZLL_RegisterColourLightEndPoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT,fptr, &endpoint->light);
+
+	/* Initialise the strings in Basic */
+	memcpy(endpoint->light.sBasicServerCluster.au8ManufacturerName, "NXP", CLD_BAS_MANUF_NAME_SIZE);
+	memcpy(endpoint->light.sBasicServerCluster.au8ModelIdentifier, "ZLL-ColorLight", CLD_BAS_MODEL_ID_SIZE);
+	memcpy(endpoint->light.sBasicServerCluster.au8DateCode, "20150212", CLD_BAS_DATE_SIZE);
+	memcpy(endpoint->light.sBasicServerCluster.au8SWBuildID, "PV1_RGB_0000", CLD_BAS_SW_BUILD_SIZE);
+
+	endpoint->light.sLevelControlServerCluster.u8CurrentLevel = 0xFF;
+	endpoint->light.sOnOffServerCluster.bOnOff = TRUE;
+	endpoint->effect.u8Effect = E_CLD_IDENTIFY_EFFECT_STOP_EFFECT;
+	endpoint->effect.u8Tick = 0;
+
 }
 
 
@@ -127,39 +144,49 @@ PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 u8Ep)
 
 PUBLIC void APP_ZCL_vSetIdentifyTime(uint16 u16Time)
 {
-	endpoint.light.sIdentifyServerCluster.u16IdentifyTime = u16Time;
+
+	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+
+	endpoint->light.sIdentifyServerCluster.u16IdentifyTime = u16Time;
 }
 
 
 
 PUBLIC bool APP_notIdentifying(){
 
-	return	endpoint.light.sIdentifyServerCluster.u16IdentifyTime == 0;
+	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+
+	return	endpoint->light.sIdentifyServerCluster.u16IdentifyTime == 0;
 }
 
 
 
 PUBLIC void APP_vHandleIdentify() {
 
+	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
 
-	rgb_handleIdentify( endpoint.light, &endpoint.effect);
+	rgb_handleIdentify( endpoint->light, &endpoint->effect);
 
 }
 
 
-PUBLIC void vIdEffectTick(uint8 u8Endpoint) {
+PUBLIC void vIdEffectTick(uint8 epId) {
 
-	if (u8Endpoint != LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT) {
+	if (epId != LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT) {
 		return;
 	}
 
-	rgb_effectTick(endpoint.light, &endpoint.effect);
+	rgb_endpoint* endpoint = getEndpoint(epId);
+
+	rgb_effectTick(endpoint->light, &endpoint->effect);
 }
 
 
 PUBLIC void vStartEffect(uint8 u8Effect) {
 
-	rgb_startEffect(endpoint.light, &endpoint.effect, u8Effect);
+	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+
+	rgb_startEffect(endpoint->light, &endpoint->effect, u8Effect);
 }
 
 
@@ -167,7 +194,9 @@ PUBLIC void vStartEffect(uint8 u8Effect) {
 
 PUBLIC void vRGBLight_SetLevels_current(){
 
-	rgb_setLevels_current(endpoint.light);
+	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+
+	rgb_setLevels_current(endpoint->light);
 
 }
 

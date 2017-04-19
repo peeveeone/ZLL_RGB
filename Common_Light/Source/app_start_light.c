@@ -63,6 +63,8 @@
 #include "app_common.h"
 
 
+#include "DriverBulb_Shim.h"
+
 /****************************************************************************/
 /***        Macro Definitions                                             ***/
 /****************************************************************************/
@@ -186,6 +188,9 @@ PUBLIC void vAppMain(void)
      DBG_vUartInit(DBG_E_UART_0, DBG_E_UART_BAUD_RATE_115200);
 
     /* Early call to Bulb initialisation to enable fast start up    */
+
+    vBULB_Init();
+
 
 
     g_u8ZpsExpiryMaxCount = 1;

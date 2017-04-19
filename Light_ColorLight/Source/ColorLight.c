@@ -13,6 +13,7 @@
 #include "app_zcl_light_task.h"
 #include "dbg.h"
 #include <string.h>
+#include "DriverBulb_Shim.h"
 #include "ColorLight.h"
 #include "Interpolate.h"
 
@@ -44,6 +45,8 @@ PUBLIC void rgb_setLevels(rgb_endpoint* endpoint, bool_t bOn, uint8 u8Level, uin
 	}
 
 	endpoint->lightSate.isOn = bOn;
+
+	vBULB_SetOnOff(bOn);
 }
 
 

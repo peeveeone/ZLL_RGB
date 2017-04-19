@@ -46,6 +46,7 @@
 #include <string.h>
 
 
+#include "DriverBulb_Shim.h"
 #include "ColorLight.h"
 #include "Interpolate.h"
 #include "pca9685.h"

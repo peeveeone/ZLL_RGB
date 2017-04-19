@@ -107,6 +107,8 @@ PUBLIC void pca9685_setPWM(uint8_t num, uint16_t on, uint16_t off){
 
 }
 
+
+
 PUBLIC void pca9685_setPin(uint8_t num, uint16_t val, bool invert){
 
 	DBG_vPrintf(TRACE_PCA9685, "pca9685_setPin  \n");
@@ -119,7 +121,7 @@ PUBLIC void pca9685_setPin(uint8_t num, uint16_t val, bool invert){
 		}
 		else if (val == 4095) {
 			// Special value for signal fully off.
-			pca9685_setPWM(num, 0, 4096);
+			pca9685_setPWM(num, 0, 4095);
 		}
 		else {
 			pca9685_setPWM(num, 0, 4095-val);
@@ -132,13 +134,102 @@ PUBLIC void pca9685_setPin(uint8_t num, uint16_t val, bool invert){
 		}
 		else if (val == 0) {
 			// Special value for signal fully off.
-			pca9685_setPWM(num, 0, 4096);
+			pca9685_setPWM(num, 0, 4095);
 		}
 		else {
 			pca9685_setPWM(num, 0, val);
 		}
 	}
+}
 
+void calcOnOff(uint16_t *in, bool_t *inv, uint16_t *on, uint16_t *off );
+void setPWM_RGB(uint8_t *num, uint16_t *onRed, uint16_t *offRed, uint16_t *onGreen, uint16_t *offGreen, uint16_t *onBlue, uint16_t *offBlue);
+
+PUBLIC void pca9685_setRgb(uint8_t num, uint16_t red, uint16_t green, uint16_t blue, bool_t invert){
+
+	uint16_t onRed, offRed, onGreen, offGreen, onBlue,  offBlue;
+	bool_t inv = invert;
+
+
+	calcOnOff(&red, &inv, &onRed, &offRed);
+	calcOnOff(&green, &inv, &onGreen, &offGreen);
+	calcOnOff(&blue, &inv, &onBlue, &offBlue);
+
+	setPWM_RGB(&num, &onRed, &offRed,  &onGreen, &offGreen, &onBlue, &offBlue);
+
+}
+
+void calcOnOff(uint16_t *in, bool_t *inv, uint16_t *on, uint16_t *off ){
+
+	// 4096 = special value for fully on/off
+
+	*in = MAX(0, *in);
+	*in = MIN(4095, *in);
+
+	if (*inv) {
+		if (*in == 0) {
+
+			*on = 4096;
+			*off = 0;
+		}
+		else if (*in == 4095) {
+
+			*on = 0;
+			*off = 4095;
+		}
+		else {
+
+			*on = 0;
+			*off = 4095 - *in;
+		}
+	}
+	else {
+		if (*in == 4095) {
+
+
+			*on = 4096;
+			*off = 0;
+		}
+		else if (*in == 0) {
+
+			*on = 0;
+			*off = 4095;
+
+		}
+		else {
+
+			*on = 0;
+			*off = *in;
+		}
+	}
+
+}
+
+void setPWM_RGB(uint8_t *num, uint16_t *onRed, uint16_t *offRed, uint16_t *onGreen, uint16_t *offGreen, uint16_t *onBlue, uint16_t *offBlue){
+
+	uint8_t dta_pwm[] =
+	{
+			//
+			LED0_ON_L + (4*(*num)),
+
+			*onBlue,
+			*onBlue>>8,
+			*offBlue,
+			*offBlue>>8,
+
+			*onGreen,
+			*onGreen>>8,
+			*offGreen,
+			*offGreen>>8,
+
+			*onRed,
+			*onRed>>8,
+			*offRed,
+			*offRed>>8
+	};
+
+
+	i2c_write(_i2caddr, dta_pwm, 13);
 
 }
 

@@ -25,6 +25,15 @@ typedef struct{
 
 }light_state;
 
+typedef struct {
+
+	uint8_t deviceAddress;
+	uint8_t firstPinAddress;
+	bool_t invert;
+
+
+}light_addressing;
+
 typedef struct
 {
 	tsZLL_ColourLightDevice light;
@@ -32,22 +41,21 @@ typedef struct
 	tsLI_Vars vars ;
 	light_state lightSate;
 	rgb_state rgbState;
+	light_addressing address;
 
 }rgb_endpoint;
 
 
 
+PUBLIC void rgb_setLevels_current(rgb_endpoint* endpoint);
 
+PUBLIC void rgb_setLevels(rgb_endpoint* endpoint, bool_t bOn, uint8 u8Level, uint8 u8Red, uint8 u8Green, uint8 u8Blue);
 
-PUBLIC void rgb_setLevels_current(tsZLL_ColourLightDevice light, tsLI_Vars* vars);
+PUBLIC void rgb_handleIdentify(rgb_endpoint* endpoint);
 
-PUBLIC void rgb_setLevels(tsLI_Vars* vars, bool_t bOn, uint8 u8Level, uint8 u8Red, uint8 u8Green, uint8 u8Blue);
+PUBLIC void rgb_startEffect(rgb_endpoint* endpoint, uint8 u8Effect);
 
-PUBLIC void rgb_handleIdentify(tsZLL_ColourLightDevice light, tsIdentifyColour *sIdEffect, tsLI_Vars* vars);
-
-PUBLIC void rgb_startEffect(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sIdEffect, uint8 u8Effect);
-
-PUBLIC void rgb_effectTick(tsZLL_ColourLightDevice sLight, tsIdentifyColour *sIdEffect, tsLI_Vars* vars);
+PUBLIC void rgb_effectTick(rgb_endpoint* endpoint);
 
 
 

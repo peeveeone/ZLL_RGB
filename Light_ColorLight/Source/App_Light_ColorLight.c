@@ -66,7 +66,12 @@
 #endif
 
 
-PRIVATE rgb_endpoint endpoint_01;
+PRIVATE rgb_endpoint endpoint_01 = {
+
+		.address.deviceAddress = 0x40,
+		.address.firstPinAddress = 0,
+		.address.invert = TRUE
+};
 
 PRIVATE rgb_endpoint *getEndpoint(uint8 epId);
 PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId);
@@ -130,6 +135,7 @@ PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId){
 
 
 	rgb_endpoint* endpoint = getEndpoint(epId);
+
 
 	// set defaults:
 	endpoint->vars.sLevel.i32Delta   = 0;
@@ -207,7 +213,7 @@ PUBLIC void APP_vHandleIdentify(uint8 epId) {
 
 	rgb_endpoint* endpoint = getEndpoint(epId);
 
-	rgb_handleIdentify( endpoint->light, &endpoint->effect, &endpoint->vars);
+	rgb_handleIdentify( endpoint);
 
 }
 
@@ -219,7 +225,7 @@ PUBLIC void vIdEffectTick(uint8 epId) {
 
 	rgb_endpoint* endpoint = getEndpoint(epId);
 
-	rgb_effectTick(endpoint->light, &endpoint->effect, &endpoint->vars);
+	rgb_effectTick(endpoint);
 }
 
 
@@ -230,7 +236,7 @@ PUBLIC void vStartEffect(uint8 epId, uint8 u8Effect) {
 
 	rgb_endpoint* endpoint = getEndpoint(epId);
 
-	rgb_startEffect(endpoint->light, &endpoint->effect, u8Effect);
+	rgb_startEffect(endpoint, u8Effect);
 }
 
 
@@ -242,7 +248,7 @@ PUBLIC void vRGBLight_SetLevels_current(uint8 epId){
 
 	rgb_endpoint* endpoint = getEndpoint(epId);
 
-	rgb_setLevels_current(endpoint->light, &endpoint->vars);
+	rgb_setLevels_current(endpoint);
 
 }
 
@@ -280,9 +286,8 @@ void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u3
 
 	if(needsUpdate){
 
-		uint8   u8Red;
-		uint8   u8Green;
-		uint8   u8Blue;
+		uint8   u8Red, u8Green,u8Blue;
+		uint16_t red, green, blue = 0;
 
 		/* Note the new values */
 		endpoint->rgbState.red   = (uint8) u32Red;
@@ -306,6 +311,8 @@ void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u3
 			if (u8Green == 0) u8Green = 1;
 			if (u8Blue  == 0) u8Blue  = 1;
 
+
+
 		}
 		else /* Turn off */
 		{
@@ -314,15 +321,18 @@ void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u3
 			u8Blue  = 0;
 		}
 
-
 		// scale to 12 bit
-		uint16_t red =  u8Red << 4 | u8Red >> 4;
-		uint16_t green = u8Green << 4 | u8Green >> 4;
-		uint16_t blue =  u8Blue << 4 | u8Blue >> 4;
+		red =  u8Red << 4 | u8Red >> 4;
+		green = u8Green << 4 | u8Green >> 4;
+		blue =  u8Blue << 4 | u8Blue >> 4;
 
-		pca9685_setPin(0, red, TRUE);
-		pca9685_setPin(1, green, TRUE);
-		pca9685_setPin(2, blue, TRUE);
+
+
+		pca9685_setPin(endpoint->address.firstPinAddress, red, TRUE);
+		pca9685_setPin(endpoint->address.firstPinAddress + 1, green, TRUE);
+		pca9685_setPin(endpoint->address.firstPinAddress +2, blue, TRUE);
+
+		pca9685_setRgb(endpoint->address.firstPinAddress + 6, red, green, blue, TRUE);
 
 		//write
 

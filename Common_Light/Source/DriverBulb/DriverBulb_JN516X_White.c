@@ -45,7 +45,7 @@
 /* PWM timer configuration */
 #define PERIPHERAL_CLOCK_FREQUENCY_HZ	16000000UL		/* System frequency 16MHz */
 #define PWM_TIMER_PRESCALE				6     			/* Prescale value to use   */
-#define PWM_COUNT_MAX					255				/* Gives PWM frequency of ((16MHz / 2^6) / 255) */
+#define PWM_COUNT_MAX					256				/* Gives PWM frequency of ((16MHz / 2^6) / 255) */
 
 
 

@@ -32,4 +32,6 @@ PUBLIC void pca9685_setPWMFreq(float freq);
 PUBLIC void pca9685_setPWM(uint8_t num, uint16_t on, uint16_t off);
 PUBLIC void pca9685_setPin(uint8_t num, uint16_t val, bool invert);
 
+PUBLIC void pca9685_setRgb(uint8_t num, uint16_t red, uint16_t green, uint16_t blue, bool_t invert);
+
 #endif /* I2C_H_ */

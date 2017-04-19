@@ -212,20 +212,24 @@ void setPWM_RGB(uint8_t *num, uint16_t *onRed, uint16_t *offRed, uint16_t *onGre
 			//
 			LED0_ON_L + (4*(*num)),
 
-			*onBlue,
-			*onBlue>>8,
-			*offBlue,
-			*offBlue>>8,
+			*onRed,
+			*onRed>>8,
+			*offRed,
+			*offRed>>8,
 
 			*onGreen,
 			*onGreen>>8,
 			*offGreen,
 			*offGreen>>8,
 
-			*onRed,
-			*onRed>>8,
-			*offRed,
-			*offRed>>8
+			*onBlue,
+			*onBlue>>8,
+			*offBlue,
+			*offBlue>>8,
+
+
+
+
 	};
 
 

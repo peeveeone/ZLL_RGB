@@ -694,7 +694,7 @@
       <InputClusters Cluster="Commission" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
       <OutputClusters Cluster="Commission" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
     </Endpoints>
-    <Endpoints Id="10" Enabled="true" ApplicationDeviceId="512" ApplicationDeviceVersion="2" Profile="Light_Link" Message="APP_msgZpsEvents_ZCL" Name="LIGHT_00">
+    <Endpoints Id="3" Enabled="true" ApplicationDeviceId="512" ApplicationDeviceVersion="2" Profile="Light_Link" Message="APP_msgZpsEvents_ZCL" Name="LIGHT_01">
       <InputClusters Cluster="Basic" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
       <InputClusters Cluster="Groups" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
       <InputClusters Cluster="Identify" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
@@ -713,6 +713,187 @@
       <OutputClusters Cluster="ColourControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
       <OutputClusters Cluster="OTA" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
     </Endpoints>
+
+    <Endpoints Id="4" Enabled="true" ApplicationDeviceId="512" ApplicationDeviceVersion="2" Profile="Light_Link" Message="APP_msgZpsEvents_ZCL" Name="LIGHT_02">
+      <InputClusters Cluster="Basic" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Groups" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Identify" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OnOff" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="LevelControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Scenes" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="ColourControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Default" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OTA" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Basic" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Groups" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Identify" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OnOff" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="LevelControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Scenes" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="ColourControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OTA" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+    </Endpoints>
+
+        <Endpoints Id="5" Enabled="true" ApplicationDeviceId="512" ApplicationDeviceVersion="2" Profile="Light_Link" Message="APP_msgZpsEvents_ZCL" Name="LIGHT_03">
+      <InputClusters Cluster="Basic" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Groups" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Identify" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OnOff" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="LevelControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Scenes" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="ColourControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Default" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OTA" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Basic" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Groups" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Identify" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OnOff" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="LevelControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Scenes" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="ColourControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OTA" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+    </Endpoints>
+
+        <Endpoints Id="6" Enabled="true" ApplicationDeviceId="512" ApplicationDeviceVersion="2" Profile="Light_Link" Message="APP_msgZpsEvents_ZCL" Name="LIGHT_04">
+      <InputClusters Cluster="Basic" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Groups" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Identify" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OnOff" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="LevelControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Scenes" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="ColourControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Default" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OTA" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Basic" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Groups" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Identify" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OnOff" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="LevelControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Scenes" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="ColourControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OTA" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+    </Endpoints>
+
+        <Endpoints Id="7" Enabled="true" ApplicationDeviceId="512" ApplicationDeviceVersion="2" Profile="Light_Link" Message="APP_msgZpsEvents_ZCL" Name="LIGHT_05">
+      <InputClusters Cluster="Basic" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Groups" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Identify" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OnOff" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="LevelControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Scenes" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="ColourControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Default" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OTA" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Basic" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Groups" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Identify" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OnOff" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="LevelControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Scenes" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="ColourControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OTA" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+    </Endpoints>
+
+        <Endpoints Id="8" Enabled="true" ApplicationDeviceId="512" ApplicationDeviceVersion="2" Profile="Light_Link" Message="APP_msgZpsEvents_ZCL" Name="LIGHT_06">
+      <InputClusters Cluster="Basic" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Groups" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Identify" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OnOff" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="LevelControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Scenes" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="ColourControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Default" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OTA" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Basic" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Groups" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Identify" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OnOff" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="LevelControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Scenes" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="ColourControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OTA" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+    </Endpoints>
+
+        <Endpoints Id="9" Enabled="true" ApplicationDeviceId="512" ApplicationDeviceVersion="2" Profile="Light_Link" Message="APP_msgZpsEvents_ZCL" Name="LIGHT_07">
+      <InputClusters Cluster="Basic" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Groups" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Identify" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OnOff" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="LevelControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Scenes" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="ColourControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Default" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OTA" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Basic" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Groups" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Identify" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OnOff" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="LevelControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Scenes" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="ColourControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OTA" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+    </Endpoints>
+
+        <Endpoints Id="10" Enabled="true" ApplicationDeviceId="512" ApplicationDeviceVersion="2" Profile="Light_Link" Message="APP_msgZpsEvents_ZCL" Name="LIGHT_08">
+      <InputClusters Cluster="Basic" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Groups" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Identify" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OnOff" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="LevelControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Scenes" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="ColourControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Default" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OTA" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Basic" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Groups" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Identify" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OnOff" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="LevelControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Scenes" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="ColourControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OTA" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+    </Endpoints>
+
+        <Endpoints Id="11" Enabled="true" ApplicationDeviceId="512" ApplicationDeviceVersion="2" Profile="Light_Link" Message="APP_msgZpsEvents_ZCL" Name="LIGHT_09">
+      <InputClusters Cluster="Basic" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Groups" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Identify" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OnOff" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="LevelControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Scenes" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="ColourControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Default" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OTA" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Basic" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Groups" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Identify" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OnOff" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="LevelControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Scenes" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="ColourControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OTA" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+    </Endpoints>
+
+        <Endpoints Id="12" Enabled="true" ApplicationDeviceId="512" ApplicationDeviceVersion="2" Profile="Light_Link" Message="APP_msgZpsEvents_ZCL" Name="LIGHT_10">
+      <InputClusters Cluster="Basic" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Groups" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Identify" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OnOff" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="LevelControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Scenes" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="ColourControl" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="Default" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <InputClusters Cluster="OTA" RxAPDU="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Basic" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Groups" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Identify" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OnOff" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="LevelControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="Scenes" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="ColourControl" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+      <OutputClusters Cluster="OTA" TxAPDUs="Light_ColorLight->apduZCL" Discoverable="true"/>
+    </Endpoints>
+
     <PDUConfiguration NumNPDUs="21" PDUMMutexName="mutexPDUM">
       <APDUs Id="Light_ColorLight->apduZDP" Name="apduZDP" Size="100" Instances="3"/>
       <APDUs Id="Light_ColorLight->apduZCL" Name="apduZCL" Size="80" Instances="10"/>

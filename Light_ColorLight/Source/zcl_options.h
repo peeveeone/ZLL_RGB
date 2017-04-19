@@ -65,7 +65,7 @@ PUBLIC void vLoadScenesNVM(void);
 
 /* Sets the number of endpoints that will be created by the ZCL library */
 #define ZLL_NUMBER_OF_ENDPOINTS                             10
-#define ZLL_NUMBER_DEVICES                                  1
+#define ZLL_NUMBER_DEVICES                                  4
 
 #define ZLL_MANUFACTURER_CODE                                0x1037
 
@@ -76,7 +76,7 @@ PUBLIC void vLoadScenesNVM(void);
 
 #define ZLL_NUMBER_OF_ZCL_APPLICATION_TIMERS                 3
 
-#define NUM_ENDPOINT_RECORDS         1
+#define NUM_ENDPOINT_RECORDS         4
 #define NUM_GROUP_RECORDS            4
 
 

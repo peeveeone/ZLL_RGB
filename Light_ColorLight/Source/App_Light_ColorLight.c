@@ -65,6 +65,7 @@
 #define TRACE_PATH  FALSE
 #endif
 
+#define NUM_EPS  4
 
 PRIVATE rgb_endpoint endpoint_01 = {
 
@@ -73,17 +74,62 @@ PRIVATE rgb_endpoint endpoint_01 = {
 		.address.invert = TRUE
 };
 
+PRIVATE rgb_endpoint endpoint_02 = {
+
+		.address.deviceAddress = 0x40,
+		.address.firstPinAddress = 3,
+		.address.invert = TRUE
+};
+
+PRIVATE rgb_endpoint endpoint_03 = {
+
+		.address.deviceAddress = 0x40,
+		.address.firstPinAddress = 6,
+		.address.invert = TRUE
+};
+
+PRIVATE rgb_endpoint endpoint_04 = {
+
+		.address.deviceAddress = 0x40,
+		.address.firstPinAddress = 9,
+		.address.invert = TRUE
+};
+
+PRIVATE int endpoints[NUM_EPS] ={
+
+		LIGHT_COLORLIGHT_LIGHT_01_ENDPOINT,
+		LIGHT_COLORLIGHT_LIGHT_02_ENDPOINT,
+		LIGHT_COLORLIGHT_LIGHT_03_ENDPOINT,
+		LIGHT_COLORLIGHT_LIGHT_04_ENDPOINT ,
+
+};
+
 PRIVATE rgb_endpoint *getEndpoint(uint8 epId);
 PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId);
 PRIVATE bool isEndpoint(uint8 epId);
 
 PRIVATE bool isEndpoint(uint8 epId){
 
-	return (epId == LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+	return epId == LIGHT_COLORLIGHT_LIGHT_01_ENDPOINT
+			|| LIGHT_COLORLIGHT_LIGHT_02_ENDPOINT
+			||LIGHT_COLORLIGHT_LIGHT_03_ENDPOINT
+			|| LIGHT_COLORLIGHT_LIGHT_04_ENDPOINT;
 
 }
 
 PRIVATE rgb_endpoint *getEndpoint(uint8 epId){
+
+	if(epId == LIGHT_COLORLIGHT_LIGHT_01_ENDPOINT)
+		return &endpoint_01;
+
+	if(epId == LIGHT_COLORLIGHT_LIGHT_02_ENDPOINT)
+		return &endpoint_02;
+
+	if(epId == LIGHT_COLORLIGHT_LIGHT_03_ENDPOINT)
+		return &endpoint_03;
+
+	if(epId == LIGHT_COLORLIGHT_LIGHT_04_ENDPOINT)
+		return &endpoint_04;
 
 	return &endpoint_01;
 }
@@ -91,15 +137,12 @@ PRIVATE rgb_endpoint *getEndpoint(uint8 epId){
 
 
 
-tsCLD_ZllDeviceTable sDeviceTable = { ZLL_NUMBER_DEVICES,
+tsCLD_ZllDeviceTable sDeviceTable = { NUM_EPS,
 		{
-				{ 0,
-						ZLL_PROFILE_ID,
-						COLOUR_LIGHT_DEVICE_ID,
-						LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT,
-						2,
-						0,
-						0}
+				{ 0, ZLL_PROFILE_ID,COLOUR_LIGHT_DEVICE_ID,LIGHT_COLORLIGHT_LIGHT_01_ENDPOINT,2,0,0}
+				,{ 0, ZLL_PROFILE_ID,COLOUR_LIGHT_DEVICE_ID,LIGHT_COLORLIGHT_LIGHT_02_ENDPOINT,2,0,0}
+				,{ 0, ZLL_PROFILE_ID,COLOUR_LIGHT_DEVICE_ID,LIGHT_COLORLIGHT_LIGHT_03_ENDPOINT,2,0,0}
+				,{ 0, ZLL_PROFILE_ID,COLOUR_LIGHT_DEVICE_ID,LIGHT_COLORLIGHT_LIGHT_04_ENDPOINT,2,0,0}
 		}
 };
 
@@ -111,7 +154,6 @@ PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 u8Ep);
 PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr, tsZLL_CommissionEndpoint* psCommissionEndpoint)
 {
 	pca9685_begin();
-
 	pca9685_setPWMFreq(200);
 
 	sDeviceTable.asDeviceRecords[0].u64IEEEAddr = *((uint64*)pvAppApiGetMacAddrLocation());
@@ -121,8 +163,14 @@ PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr, t
 
 	eZLL_RegisterCommissionEndPoint(LIGHT_COLORLIGHT_COMMISSION_ENDPOINT,fptr,psCommissionEndpoint);
 
+	int i;
 
-	registerEndpoint(fptr, LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+	for (i = 0; i < NUM_EPS; ++i) {
+
+		registerEndpoint(fptr, endpoints[i]);
+
+	}
+
 
 
 	return E_ZCL_SUCCESS;
@@ -256,22 +304,22 @@ void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u3
 
 PUBLIC void vCreateInterpolationPoints( void){
 
-	// iterate all ep's
-	if(!isEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT))
-		return;
 
-	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
+	int i;
 
+	for (i = 0; i < NUM_EPS; ++i) {
 
-	ip_createPoints(&endpoint->vars);
+		rgb_endpoint* endpoint = getEndpoint(endpoints[i]);
 
+		ip_createPoints(&endpoint->vars);
 
-	rgb_setLevel(endpoint,
-			endpoint->vars.sLevel.u32Current >> SCALE,
-			endpoint->vars.sRed.u32Current >> SCALE,
-			endpoint->vars.sGreen.u32Current >> SCALE,
-			endpoint->vars.sBlue.u32Current >> SCALE);
+		rgb_setLevel(endpoint,
+				endpoint->vars.sLevel.u32Current >> SCALE,
+				endpoint->vars.sRed.u32Current >> SCALE,
+				endpoint->vars.sGreen.u32Current >> SCALE,
+				endpoint->vars.sBlue.u32Current >> SCALE);
 
+	}
 }
 
 void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u32Green, uint32 u32Blue)
@@ -327,12 +375,7 @@ void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u3
 		blue =  u8Blue << 4 | u8Blue >> 4;
 
 
-
-		pca9685_setPin(endpoint->address.firstPinAddress, red, TRUE);
-		pca9685_setPin(endpoint->address.firstPinAddress + 1, green, TRUE);
-		pca9685_setPin(endpoint->address.firstPinAddress +2, blue, TRUE);
-
-		pca9685_setRgb(endpoint->address.firstPinAddress + 6, red, green, blue, TRUE);
+		pca9685_setRgb(endpoint->address.firstPinAddress, red, green, blue, TRUE);
 
 		//write
 

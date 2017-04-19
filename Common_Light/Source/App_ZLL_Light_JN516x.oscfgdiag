@@ -14,9 +14,9 @@
       </Modules>
       <Modules xmi:type="oscfg:Module" xmi:id="_UoRIIDpMEd6X1p7n01EMHA" name="JN_AN_1171_ZigBee_LightLink_Demo">
         <ISRs xmi:type="oscfg:ISR" xmi:id="_8lTFEDpQEd6X1p7n01EMHA" name="APP_isrTickTimer" IPL="12" type="controlled" ISRSource="_BvTr0DpREd6X1p7n01EMHA"/>
-        <Messages xmi:type="oscfg:Message" xmi:id="_JBf7EDrVEd6X1p7n01EMHA" name="APP_msgZpsEvents" ctype="ZPS_tsAfEvent" queue="1" Notifies="_x9JOoDrUEd6X1p7n01EMHA"/>
+        <Messages xmi:type="oscfg:Message" xmi:id="_JBf7EDrVEd6X1p7n01EMHA" name="APP_msgZpsEvents" ctype="ZPS_tsAfEvent" queue="8" Notifies="_x9JOoDrUEd6X1p7n01EMHA"/>
         <Messages xmi:type="oscfg:Message" xmi:id="_5GqlEFtMEd6qH6QyWDvQeQ" name="APP_msgEvents" ctype="APP_tsLightEvent" queue="8" Notifies="_x9JOoDrUEd6X1p7n01EMHA"/>
-        <Messages xmi:type="oscfg:Message" xmi:id="_dzNRgLGcEd6awJvEGNtQBw" name="APP_msgZpsEvents_ZCL" ctype="ZPS_tsAfEvent" queue="1" Notifies="_AbUVALGdEd6awJvEGNtQBw"/>
+        <Messages xmi:type="oscfg:Message" xmi:id="_dzNRgLGcEd6awJvEGNtQBw" name="APP_msgZpsEvents_ZCL" ctype="ZPS_tsAfEvent" queue="8" Notifies="_AbUVALGdEd6awJvEGNtQBw"/>
         <Messages xmi:type="oscfg:Message" xmi:id="_xoEPIL9fEeCwcYOBFX6I-g" name="APP_CommissionEvents" ctype="APP_CommissionEvent" queue="3" Notifies="_GM3I4L9gEeCwcYOBFX6I-g"/>
         <HWCounters xmi:type="oscfg:HWCounter" xmi:id="_lHpu4DpQEd6X1p7n01EMHA" name="APP_cntrTickTimer" disable_callback="_gJsHIDuwEd6x482rWS0aIQ" enable_callback="_Y9qlUTuwEd6x482rWS0aIQ" get_callback="_1gV7oDuwEd6x482rWS0aIQ" set_callback="_y13SYDuwEd6x482rWS0aIQ">
           <SWTimers xmi:type="oscfg:SWTimer" xmi:id="_T0f0ULJaEd6awJvEGNtQBw" name="APP_TickTimer" Activates="_gM15EOnKEeCwM_aphLHMtw"/>

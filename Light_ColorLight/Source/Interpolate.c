@@ -77,13 +77,13 @@ void ip_updateDriver(tsLI_Vars* sLI_Vars)
 
 
 
-	 vBULB_SetColour(sLI_Vars->sRed.u32Current   >> SCALE,
-			         sLI_Vars->sGreen.u32Current >> SCALE,
-			         sLI_Vars->sBlue.u32Current  >> SCALE);
-
-	 vBULB_SetLevel(sLI_Vars->sLevel.u32Current  >> SCALE);
-
-	 vBULB_SetColourTemperature(sLI_Vars->sColTemp.u32Current >> SCALE);
+//	 vBULB_SetColour(sLI_Vars->sRed.u32Current   >> SCALE,
+//			         sLI_Vars->sGreen.u32Current >> SCALE,
+//			         sLI_Vars->sBlue.u32Current  >> SCALE);
+//
+//	 vBULB_SetLevel(sLI_Vars->sLevel.u32Current  >> SCALE);
+//
+//	 vBULB_SetColourTemperature(sLI_Vars->sColTemp.u32Current >> SCALE);
 }
 
 

@@ -75,6 +75,8 @@ void ip_updateDriver(tsLI_Vars* sLI_Vars)
 {
 	// Set output, ext. driver
 
+
+
 	 vBULB_SetColour(sLI_Vars->sRed.u32Current   >> SCALE,
 			         sLI_Vars->sGreen.u32Current >> SCALE,
 			         sLI_Vars->sBlue.u32Current  >> SCALE);

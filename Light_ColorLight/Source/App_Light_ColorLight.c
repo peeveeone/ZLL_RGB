@@ -49,6 +49,7 @@
 #include "DriverBulb_Shim.h"
 #include "ColorLight.h"
 #include "Interpolate.h"
+#include "pca9685.h"
 
 
 
@@ -65,14 +66,7 @@
 #endif
 
 
-PRIVATE rgb_endpoint endpoint_01 = {
-		.vars.sLevel.i32Delta   = 0,
-		.vars.sRed.i32Delta     = 0,
-		.vars.sGreen.i32Delta   = 0,
-		.vars.sBlue.i32Delta    = 0,
-		.vars.sColTemp.i32Delta = 0,
-		.vars.u32PointsAdded  = INTPOINTS
-};
+PRIVATE rgb_endpoint endpoint_01;
 
 PRIVATE rgb_endpoint *getEndpoint(uint8 epId);
 PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId);
@@ -111,6 +105,10 @@ PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 u8Ep);
 
 PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr, tsZLL_CommissionEndpoint* psCommissionEndpoint)
 {
+	pca9685_begin();
+
+	pca9685_setPWMFreq(200);
+
 	sDeviceTable.asDeviceRecords[0].u64IEEEAddr = *((uint64*)pvAppApiGetMacAddrLocation());
 
 	ZPS_vAplZdoRegisterProfileCallback(vOverideProfileId);
@@ -132,6 +130,20 @@ PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId){
 
 
 	rgb_endpoint* endpoint = getEndpoint(epId);
+
+	// set defaults:
+	endpoint->vars.sLevel.i32Delta   = 0;
+	endpoint->vars.sRed.i32Delta     = 0;
+	endpoint->vars.sGreen.i32Delta   = 0;
+	endpoint->vars.sBlue.i32Delta    = 0;
+	endpoint->vars.sColTemp.i32Delta = 0;
+	endpoint->vars.u32PointsAdded  = INTPOINTS;
+
+	endpoint->rgbState.red = 255;
+	endpoint->rgbState.green = 255;
+	endpoint->rgbState.blue = 255;
+	endpoint->lightSate.isOn = TRUE;
+	endpoint->lightSate.level = 255;
 
 
 	ip_setCurrentValues(&endpoint->vars, CLD_LEVELCONTROL_MAX_LEVEL ,255,255,255,4000);
@@ -234,19 +246,97 @@ PUBLIC void vRGBLight_SetLevels_current(uint8 epId){
 
 }
 
+void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u32Green, uint32 u32Blue);
 
 PUBLIC void vCreateInterpolationPoints( void){
 
 	// iterate all ep's
 	if(!isEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT))
-			return;
+		return;
 
 	rgb_endpoint* endpoint = getEndpoint(LIGHT_COLORLIGHT_LIGHT_00_ENDPOINT);
 
 
 	ip_createPoints(&endpoint->vars);
 
+
+	rgb_setLevel(endpoint,
+			endpoint->vars.sLevel.u32Current >> SCALE,
+			endpoint->vars.sRed.u32Current >> SCALE,
+			endpoint->vars.sGreen.u32Current >> SCALE,
+			endpoint->vars.sBlue.u32Current >> SCALE);
+
 }
+
+void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u32Green, uint32 u32Blue)
+{
+	bool_t needsUpdate = FALSE;
+
+	needsUpdate = endpoint->rgbState.blue != (uint8) u32Red ||
+			endpoint->rgbState.green !=(uint8) u32Green ||
+			endpoint->rgbState.blue != (uint8) u32Blue||
+			endpoint->lightSate.level != (uint8) level;
+
+
+	if(needsUpdate){
+
+		uint8   u8Red;
+		uint8   u8Green;
+		uint8   u8Blue;
+
+		/* Note the new values */
+		endpoint->rgbState.red   = (uint8) u32Red;
+		endpoint->rgbState.green = (uint8) u32Green;
+		endpoint->rgbState.blue  = (uint8) u32Blue;
+		endpoint->lightSate.level = (uint8) MAX(1, level);
+
+
+		/* Is the lamp on ? */
+		if (endpoint->lightSate.isOn)
+		{
+			/* Set outputs */
+
+			/* Scale colour for brightness level */
+			u8Red   = (uint8)(((uint32)endpoint->rgbState.red   * (uint32)endpoint->lightSate.level) / (uint32)255);
+			u8Green = (uint8)(((uint32)endpoint->rgbState.green * (uint32)endpoint->lightSate.level) / (uint32)255);
+			u8Blue  = (uint8)(((uint32)endpoint->rgbState.blue  * (uint32)endpoint->lightSate.level) / (uint32)255);
+
+			/* Don't allow fully off */
+			if (u8Red   == 0) u8Red   = 1;
+			if (u8Green == 0) u8Green = 1;
+			if (u8Blue  == 0) u8Blue  = 1;
+
+		}
+		else /* Turn off */
+		{
+			u8Red   = 0;
+			u8Green = 0;
+			u8Blue  = 0;
+		}
+
+
+		// scale to 12 bit
+		uint16_t red =  u8Red << 4 | u8Red >> 4;
+		uint16_t green = u8Green << 4 | u8Green >> 4;
+		uint16_t blue =  u8Blue << 4 | u8Blue >> 4;
+
+		pca9685_setPin(0, red, TRUE);
+		pca9685_setPin(1, green, TRUE);
+		pca9685_setPin(2, blue, TRUE);
+
+		//write
+
+
+	}
+
+}
+
+
+
+
+
+
+
 
 
 

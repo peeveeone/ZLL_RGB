@@ -12,9 +12,26 @@
 
 typedef struct
 {
+	uint8_t red;
+	uint8_t green;
+	uint8_t blue;
+
+}rgb_state;
+
+typedef struct{
+
+	uint8_t level;
+	bool_t isOn;
+
+}light_state;
+
+typedef struct
+{
 	tsZLL_ColourLightDevice light;
 	tsIdentifyColour effect;
 	tsLI_Vars vars ;
+	light_state lightSate;
+	rgb_state rgbState;
 
 }rgb_endpoint;
 

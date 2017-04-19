@@ -204,6 +204,7 @@ APPSRC += app_light_commission_task.c
 
 APPSRC += ColorLight.c
 APPSRC += Interpolate.c
+APPSRC += pca9685.c
 
 ifeq ($(OTA),1)
 APPSRC += app_ota_client.c

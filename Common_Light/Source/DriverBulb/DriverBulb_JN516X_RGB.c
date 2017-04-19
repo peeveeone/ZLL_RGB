@@ -39,6 +39,8 @@
 /* Device includes */
 #include "DriverBulb.h"
 
+#include "tlc5947.h"
+
 /****************************************************************************/
 /***        Macro Definitions                                             ***/
 /****************************************************************************/
@@ -335,6 +337,9 @@ PUBLIC bool_t DriverBulb_bFailed(void)
  ****************************************************************************/
 PRIVATE void DriverBulb_vOutput(void)
 {
+	uint16_t red = 0;
+	uint16_t green = 0;
+	uint16_t blue = 0;
 
 	uint8   u8Red;
 	uint8   u8Green;
@@ -352,6 +357,13 @@ PRIVATE void DriverBulb_vOutput(void)
 		if (u8Red   == 0) u8Red   = 1;
 		if (u8Green == 0) u8Green = 1;
 		if (u8Blue  == 0) u8Blue  = 1;
+
+
+		 red =  u8Red << 4 | u8Red >> 4;
+		 green = u8Green << 4 | u8Green >> 4;
+		 blue =  u8Blue << 4 | u8Blue >> 4;
+
+
 	}
 	else /* Turn off */
 	{
@@ -364,7 +376,6 @@ PRIVATE void DriverBulb_vOutput(void)
 	vAHI_TimerStartRepeat(PWM_TIMER_RED,   (PWM_COUNT_MAX - u8Red  ), PWM_COUNT_MAX);
 	vAHI_TimerStartRepeat(PWM_TIMER_GREEN, (PWM_COUNT_MAX - u8Green), PWM_COUNT_MAX);
 	vAHI_TimerStartRepeat(PWM_TIMER_BLUE,  (PWM_COUNT_MAX - u8Blue ), PWM_COUNT_MAX);
-
 }
 
 /****************************************************************************/

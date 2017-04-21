@@ -45,8 +45,6 @@
 #include "dbg.h"
 #include <string.h>
 
-
-#include "DriverBulb_Shim.h"
 #include "ColorLight.h"
 #include "Interpolate.h"
 #include "pca9685.h"
@@ -110,14 +108,14 @@ PRIVATE bool isEndpoint(uint8 epId);
 
 PRIVATE bool isEndpoint(uint8 epId){
 
-	return epId == LIGHT_COLORLIGHT_LIGHT_01_ENDPOINT
-			|| LIGHT_COLORLIGHT_LIGHT_02_ENDPOINT
-			||LIGHT_COLORLIGHT_LIGHT_03_ENDPOINT
-			|| LIGHT_COLORLIGHT_LIGHT_04_ENDPOINT;
+	bool isEp = (epId >= LIGHT_COLORLIGHT_LIGHT_01_ENDPOINT && epId <= LIGHT_COLORLIGHT_LIGHT_04_ENDPOINT );
 
+	return isEp;
 }
 
 PRIVATE rgb_endpoint *getEndpoint(uint8 epId){
+
+	//DBG_vPrintf(TRACE_LIGHT_TASK, "getEndpoint %d \n", epId);
 
 	if(epId == LIGHT_COLORLIGHT_LIGHT_01_ENDPOINT)
 		return &endpoint_01;
@@ -131,7 +129,10 @@ PRIVATE rgb_endpoint *getEndpoint(uint8 epId){
 	if(epId == LIGHT_COLORLIGHT_LIGHT_04_ENDPOINT)
 		return &endpoint_04;
 
-	return &endpoint_01;
+
+	//DBG_vPrintf(TRACE_LIGHT_TASK, "getEndpoint : DEFAULT  \n");
+
+	return NULL;
 }
 
 
@@ -153,6 +154,8 @@ PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 u8Ep);
 
 PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr, tsZLL_CommissionEndpoint* psCommissionEndpoint)
 {
+	DBG_vPrintf(TRACE_LIGHT_TASK, "eApp_ZLL_RegisterEndpoint  \n");
+
 	pca9685_begin();
 	pca9685_setPWMFreq(200);
 
@@ -181,8 +184,9 @@ PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId){
 	if(!isEndpoint(epId))
 		return;
 
-
 	rgb_endpoint* endpoint = getEndpoint(epId);
+
+	DBG_vPrintf(TRACE_LIGHT_TASK, "registerEndpoint : %d \n", epId);
 
 
 	// set defaults:
@@ -194,13 +198,13 @@ PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId){
 	endpoint->vars.u32PointsAdded  = INTPOINTS;
 
 	endpoint->rgbState.red = 255;
-	endpoint->rgbState.green = 255;
+	endpoint->rgbState.green = 225;
 	endpoint->rgbState.blue = 255;
 	endpoint->lightSate.isOn = TRUE;
 	endpoint->lightSate.level = 255;
 
 
-	ip_setCurrentValues(&endpoint->vars, CLD_LEVELCONTROL_MAX_LEVEL ,255,255,255,4000);
+	ip_setCurrentValues(&endpoint->vars, CLD_LEVELCONTROL_MAX_LEVEL ,253,137,225,4000);
 
 
 	eZLL_RegisterColourLightEndPoint(epId,fptr, &endpoint->light);
@@ -211,10 +215,14 @@ PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId){
 	memcpy(endpoint->light.sBasicServerCluster.au8DateCode, "20150212", CLD_BAS_DATE_SIZE);
 	memcpy(endpoint->light.sBasicServerCluster.au8SWBuildID, "PV1_RGB_0000", CLD_BAS_SW_BUILD_SIZE);
 
-	endpoint->light.sLevelControlServerCluster.u8CurrentLevel = 0xFF;
-	endpoint->light.sOnOffServerCluster.bOnOff = TRUE;
+
 	endpoint->effect.u8Effect = E_CLD_IDENTIFY_EFFECT_STOP_EFFECT;
 	endpoint->effect.u8Tick = 0;
+
+	endpoint->light.sLevelControlServerCluster.u8CurrentLevel = 0xFF;
+	endpoint->light.sOnOffServerCluster.bOnOff = TRUE;
+
+
 
 }
 
@@ -232,6 +240,8 @@ PRIVATE void vOverideProfileId(uint16* pu16Profile, uint8 epId)
 
 PUBLIC void APP_ZCL_vSetIdentifyTime(uint8 epId, uint16 u16Time)
 {
+
+	DBG_vPrintf(TRACE_LIGHT_TASK, "APP_ZCL_vSetIdentifyTime  \n");
 	if(!isEndpoint(epId))
 		return;
 
@@ -243,6 +253,8 @@ PUBLIC void APP_ZCL_vSetIdentifyTime(uint8 epId, uint16 u16Time)
 
 
 PUBLIC bool APP_notIdentifying(uint8 epId){
+
+	DBG_vPrintf(TRACE_LIGHT_TASK, "APP_notIdentifying  \n");
 
 	if(!isEndpoint(epId))
 		return FALSE;
@@ -256,6 +268,8 @@ PUBLIC bool APP_notIdentifying(uint8 epId){
 
 PUBLIC void APP_vHandleIdentify(uint8 epId) {
 
+	DBG_vPrintf(TRACE_LIGHT_TASK, "APP_vHandleIdentify  \n");
+
 	if(!isEndpoint(epId))
 		return;
 
@@ -268,6 +282,8 @@ PUBLIC void APP_vHandleIdentify(uint8 epId) {
 
 PUBLIC void vIdEffectTick(uint8 epId) {
 
+	//DBG_vPrintf(TRACE_LIGHT_TASK, "vIdEffectTick  \n");
+
 	if(!isEndpoint(epId))
 		return;
 
@@ -278,6 +294,8 @@ PUBLIC void vIdEffectTick(uint8 epId) {
 
 
 PUBLIC void vStartEffect(uint8 epId, uint8 u8Effect) {
+
+	DBG_vPrintf(TRACE_LIGHT_TASK, "vStartEffect  \n");
 
 	if(!isEndpoint(epId))
 		return;
@@ -290,6 +308,8 @@ PUBLIC void vStartEffect(uint8 epId, uint8 u8Effect) {
 
 
 PUBLIC void vRGBLight_SetLevels_current(uint8 epId){
+
+	DBG_vPrintf(TRACE_LIGHT_TASK, "vRGBLight_SetLevels_current  \n");
 
 	if(!isEndpoint(epId))
 		return;
@@ -304,29 +324,53 @@ void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u3
 
 PUBLIC void vCreateInterpolationPoints( void){
 
+	static bool bussy = FALSE;
+
+	if(bussy)
+		return;
+
+	if(!bussy){
+		bussy = TRUE;
+	} else {
+
+		DBG_vPrintf(TRACE_LIGHT_TASK, "vCreateInterpolationPoints - BUSSY \n");
+		return;
+	}
 
 	int i;
 
 	for (i = 0; i < NUM_EPS; ++i) {
 
-		rgb_endpoint* endpoint = getEndpoint(endpoints[i]);
+		if(isEndpoint(endpoints[i]))
+		{
 
-		ip_createPoints(&endpoint->vars);
+			//DBG_vPrintf(TRACE_LIGHT_TASK, "vCreateInterpolationPoints - ep :%d\n", i);
 
-		rgb_setLevel(endpoint,
-				endpoint->vars.sLevel.u32Current >> SCALE,
-				endpoint->vars.sRed.u32Current >> SCALE,
-				endpoint->vars.sGreen.u32Current >> SCALE,
-				endpoint->vars.sBlue.u32Current >> SCALE);
+			rgb_endpoint* endpoint = getEndpoint(endpoints[i]);
 
+			ip_createPoints(&endpoint->vars);
+
+			rgb_setLevel(endpoint,
+					endpoint->vars.sLevel.u32Current >> SCALE,
+					endpoint->vars.sRed.u32Current >> SCALE,
+					endpoint->vars.sGreen.u32Current >> SCALE,
+					endpoint->vars.sBlue.u32Current >> SCALE);
+		} else{
+
+			DBG_vPrintf(TRACE_LIGHT_TASK, "vCreateInterpolationPoints - ep :%d NOT AN ENDPOINT\n", i);
+		}
 	}
+
+	bussy = FALSE;
 }
 
 void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u32Green, uint32 u32Blue)
 {
+	//DBG_vPrintf(TRACE_LIGHT_TASK, "rgb_setLevel  \n");
+
 	bool_t needsUpdate = FALSE;
 
-	needsUpdate = endpoint->rgbState.blue != (uint8) u32Red ||
+	needsUpdate = endpoint->rgbState.red != (uint8) u32Red ||
 			endpoint->rgbState.green !=(uint8) u32Green ||
 			endpoint->rgbState.blue != (uint8) u32Blue||
 			endpoint->lightSate.level != (uint8) level;
@@ -374,6 +418,12 @@ void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u3
 		green = u8Green << 4 | u8Green >> 4;
 		blue =  u8Blue << 4 | u8Blue >> 4;
 
+		DBG_vPrintf(TRACE_LIGHT_TASK, "rgb_setLevel to output fp: %d  r:%d g:%d b:%d \n",endpoint->address.firstPinAddress,  u8Red, u8Green, u8Blue);
+
+		//		pca9685_setPin(0, red, TRUE);
+		//		pca9685_setPin(1, green, TRUE);
+		//		pca9685_setPin(2, blue, TRUE);
+		//	//	pca9685_setRgb(0, red, green, blue, TRUE);
 
 		pca9685_setRgb(endpoint->address.firstPinAddress, red, green, blue, TRUE);
 

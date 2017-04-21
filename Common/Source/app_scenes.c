@@ -76,7 +76,7 @@ typedef struct
 /***        Local Function Prototypes                                     ***/
 /****************************************************************************/
 #if (defined CLD_SCENES) && (defined SCENES_SERVER)
-PRIVATE  bool bCLD_ScenesSearchForScene(void *pvSearchParam, void *psNodeUnderTest);
+//PRIVATE  bool bCLD_ScenesSearchForScene(void *pvSearchParam, void *psNodeUnderTest);
 #endif
 
 /****************************************************************************/
@@ -87,7 +87,7 @@ PRIVATE  bool bCLD_ScenesSearchForScene(void *pvSearchParam, void *psNodeUnderTe
 /***        Local Variables                                               ***/
 /****************************************************************************/
 #if (defined CLD_SCENES) && (defined SCENES_SERVER)
-PRIVATE tsAPP_ScenesCustomData sScenesCustomData;
+//PRIVATE tsAPP_ScenesCustomData sScenesCustomData;
 #endif
 
 
@@ -150,23 +150,23 @@ PUBLIC void vSaveScenesNVM(void)
 //    PDM_eSaveRecordData(PDM_ID_APP_SCENES_DATA,&sScenesCustomData,sizeof(tsAPP_ScenesCustomData));
 }
 
-PRIVATE  bool bCLD_ScenesSearchForScene(void *pvSearchParam, void *psNodeUnderTest)
-{
-//    tsSearchParameter *psSearchParameter = (tsSearchParameter*)pvSearchParam;
-//    tsCLD_ScenesTableEntry *psSearchEntry = (tsCLD_ScenesTableEntry*)psNodeUnderTest;
-//
-//    if((psSearchParameter->u8SearchOptions & SCENES_SEARCH_GROUP_ID) && (psSearchParameter->u16GroupId != psSearchEntry->u16GroupId))
-//    {
-//        return FALSE;
-//    }
-//
-//    if((psSearchParameter->u8SearchOptions & SCENES_SEARCH_SCENE_ID) && (psSearchParameter->u8SceneId != psSearchEntry->u8SceneId))
-//    {
-//    return FALSE;
-//    }
-//
-//    return TRUE;
-}
+//PRIVATE  bool bCLD_ScenesSearchForScene(void *pvSearchParam, void *psNodeUnderTest)
+//{
+////    tsSearchParameter *psSearchParameter = (tsSearchParameter*)pvSearchParam;
+////    tsCLD_ScenesTableEntry *psSearchEntry = (tsCLD_ScenesTableEntry*)psNodeUnderTest;
+////
+////    if((psSearchParameter->u8SearchOptions & SCENES_SEARCH_GROUP_ID) && (psSearchParameter->u16GroupId != psSearchEntry->u16GroupId))
+////    {
+////        return FALSE;
+////    }
+////
+////    if((psSearchParameter->u8SearchOptions & SCENES_SEARCH_SCENE_ID) && (psSearchParameter->u8SceneId != psSearchEntry->u8SceneId))
+////    {
+////    return FALSE;
+////    }
+////
+////    return TRUE;
+//}
 #endif
 
 #if (defined CLD_SCENES) && (defined SCENES_SERVER)

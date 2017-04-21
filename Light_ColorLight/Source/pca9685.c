@@ -320,7 +320,7 @@ PRIVATE uint8 i2c_read(uint8 dev_addr, uint8 *buff, uint8 len)
 void delay_ms (uint16_t ms)
 {
 
-	DBG_vPrintf(TRUE, "\n\nStart delay : %d ms\n", ms );
+	DBG_vPrintf(TRACE_PCA9685, "\n\nStart delay : %d ms\n", ms );
 
 	uint16_t delay;
 	volatile uint32_t i;
@@ -330,6 +330,6 @@ void delay_ms (uint16_t ms)
 		for (i=3500; i >0;i--){};
 	}
 
-	DBG_vPrintf(TRUE, "End delay : %d ms\n\n", ms );
+	DBG_vPrintf(TRACE_PCA9685, "End delay : %d ms\n\n", ms );
 }
 

@@ -39,6 +39,12 @@
 /* Device includes */
 #include "DriverBulb.h"
 
+#ifdef DEBUG_LIGHT_TASK
+#define TRACE_LIGHT_TASK  TRUE
+#else
+#define TRACE_LIGHT_TASK FALSE
+#endif
+
 /****************************************************************************/
 /***        Macro Definitions                                             ***/
 /****************************************************************************/
@@ -99,6 +105,9 @@ PRIVATE uint8   u8CurrLevel 	= 255;
  ****************************************************************************/
 PUBLIC void DriverBulb_vInit(void)
 {
+
+	DBG_vPrintf(TRACE_LIGHT_TASK, "DriverBulb_vInit RGB \n");
+
 	static bool_t bInit = FALSE;
 
 	/* Not already initialized ? */

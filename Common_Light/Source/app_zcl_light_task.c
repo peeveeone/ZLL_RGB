@@ -93,6 +93,12 @@
 #define TRACE_LIGHT_TASK FALSE
 #endif
 
+#ifndef DEBUG_START_UP
+#define TRACE_START FALSE
+#else
+#define TRACE_START TRUE
+#endif
+
 
 
 #define TRACE_PATH  FALSE
@@ -150,6 +156,11 @@ PUBLIC void* psGetDeviceTable(void) {
  ****************************************************************************/
 PUBLIC void APP_ZCL_vInitialise(void)
 {
+	DBG_vPrintf(TRACE_START, "***********************************************\n");
+	DBG_vPrintf(TRACE_START, "LIGHT NODE INITIALISE                          \n");
+	DBG_vPrintf(TRACE_START, "***********************************************\n");
+
+
 	/* Initialise ZLL */
 	eZLL_Initialise(&APP_ZCL_cbGeneralCallback, apduZCL);
 

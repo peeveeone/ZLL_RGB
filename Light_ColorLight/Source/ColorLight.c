@@ -13,7 +13,7 @@
 #include "app_zcl_light_task.h"
 #include "dbg.h"
 #include <string.h>
-#include "DriverBulb_Shim.h"
+
 #include "ColorLight.h"
 #include "Interpolate.h"
 

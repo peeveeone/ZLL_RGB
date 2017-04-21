@@ -71,7 +71,7 @@
 
 
 
-#include "DriverBulb.h"
+
 
 #include "zcl.h"
 
@@ -384,7 +384,7 @@ PUBLIC void APP_vInitialiseNode(void) {
 #ifndef CLD_COLOUR_CONTROL
     /* Second call to bulb initialisation.  This is required by the synchronus bulb      */
     /* Driver to enable the anti rebroadcast-flicker mechanism. Ignored by other drivers */
-    DriverBulb_vInit();
+    //DriverBulb_vInit();
 #endif
 
 #if (defined PDM_EEPROM)

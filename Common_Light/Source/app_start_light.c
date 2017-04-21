@@ -63,7 +63,7 @@
 #include "app_common.h"
 
 
-#include "DriverBulb_Shim.h"
+
 
 /****************************************************************************/
 /***        Macro Definitions                                             ***/
@@ -189,7 +189,7 @@ PUBLIC void vAppMain(void)
 
     /* Early call to Bulb initialisation to enable fast start up    */
 
-    vBULB_Init();
+    //vBULB_Init();
 
 
 

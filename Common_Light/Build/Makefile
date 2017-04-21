@@ -214,8 +214,8 @@ APPSRC += appZpsBeaconHandler.c
 
 #Light device type and it's associated driver 
 APPSRC += App_$(TARGET).c
-APPSRC += DriverBulb_$(DR).c
-APPSRC += DriverBulb_Shim.c
+#APPSRC += DriverBulb_$(DR).c
+#APPSRC += DriverBulb_Shim.c
 
 CFLAGS +=-D$(DR)
 CFLAGS += -DEMBEDDED

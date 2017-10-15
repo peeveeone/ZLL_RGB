@@ -1,7 +1,7 @@
 
 # Custom RGB ZLL Lights
 
-This project contains the sources for creating custom ZLL firmware that works on any JN5168 chip, inclusing a [Mesh Bee](http://wiki.seeedstudio.com/wiki/Mesh_Bee). This project also relies on the [Adafruit PCA9685](https://www.adafruit.com/product/815) as PWM controller.
+This project contains the sources for creating custom ZLL firmware that works on any JN5168 chip, inclusing a [Mesh Bee](http://wiki.seeedstudio.com/wiki/Mesh_Bee). This project also requires the [Adafruit PCA9685](https://www.adafruit.com/product/815) PWM controller.
 
 For details on the project please visit my blog: [PeeVeeOne.com](http://peeveeone.com/?tag=light-link)
 

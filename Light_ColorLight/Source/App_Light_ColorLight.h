@@ -50,6 +50,34 @@ extern tsCLD_ZllDeviceTable sDeviceTable;
 /***        Exported Functions                                            ***/
 /****************************************************************************/
 
+
+#define INVERT_ENDPOINTS  FALSE
+#define NUMBER_ENDPOINTS   1
+
+
+#if(defined INVERT)
+#define INVERT_ENDPOINTS TRUE
+#endif
+
+#if (defined EPS01)
+#define NUMBER_ENDPOINTS   1
+#endif
+
+#if (defined EPS02)
+#define NUMBER_ENDPOINTS   2
+#endif
+
+#if (defined EPS03)
+#define NUMBER_ENDPOINTS   3
+#endif
+
+#if (defined EPS04)
+#define NUMBER_ENDPOINTS  4
+#endif
+
+
+
+
 //generic
 PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr, tsZLL_CommissionEndpoint* psCommissionEndpoint);
 

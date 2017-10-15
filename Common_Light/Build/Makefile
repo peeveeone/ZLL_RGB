@@ -30,8 +30,32 @@
 # Copyright NXP B.V. 2012. All rights reserved
 #
 ############################################################################
+# Default target device is the JN5168
+NUMBER_ENDPOINTS ?= 4
+INVERT ?= 1
 
-LIGHT ?= Light_ExtendedColorLight
+INVERTED ?= REGULAR
+
+ifeq ($(INVERT), 1)
+CFLAGS  += -DINVERT
+INVERTED = INVERTED
+endif
+
+ifeq ($(NUMBER_ENDPOINTS), 1)
+CFLAGS  += -DEPS01
+endif
+ifeq ($(NUMBER_ENDPOINTS), 2)
+CFLAGS  += -DEPS02
+endif
+ifeq ($(NUMBER_ENDPOINTS), 3)
+CFLAGS  += -DEPS03
+endif
+ifeq ($(NUMBER_ENDPOINTS), 4)
+CFLAGS  += -DEPS04
+endif
+
+
+LIGHT ?= Light_ColorLight
 
 # Application target name
 TARGET = $(LIGHT)
@@ -390,7 +414,7 @@ $(DEV_BLD_DIR)/$(TARGET)_$(JENNIC_CHIP)$(BIN_SUFFIX).bin: $(DEV_BLD_DIR)/$(TARGE
 	$(info Generating binary ...)
 	$(OBJCOPY) -j .version -j .bir -j .flashheader -j .vsr_table -j .vsr_handlers  -j .rodata -j .text -j .data -j .bss -j .heap -j .stack -S -O binary $< $@
 
-	cp -f $(DEV_BLD_DIR)/$(TARGET)_$(JENNIC_CHIP)$(BIN_SUFFIX).bin ../../$(TARGET)_$(JENNIC_CHIP)$(BIN_SUFFIX).bin
+	cp -f $(DEV_BLD_DIR)/$(TARGET)_$(JENNIC_CHIP)$(BIN_SUFFIX).bin ../../$(TARGET)_$(JENNIC_CHIP)_ME_$(NUMBER_ENDPOINTS)_$(INVERTED).bin
 
 ifeq ($(OTA),1)	
 Client.bin:$(DEV_BLD_DIR)/$(TARGET)_$(JENNIC_CHIP)$(BIN_SUFFIX).bin

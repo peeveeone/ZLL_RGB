@@ -63,42 +63,48 @@
 #define TRACE_PATH  FALSE
 #endif
 
-#define NUM_EPS  4
 
 PRIVATE rgb_endpoint endpoint_01 = {
 
 		.address.deviceAddress = 0x40,
 		.address.firstPinAddress = 0,
-		.address.invert = TRUE
+		.address.invert = INVERT_ENDPOINTS
 };
 
 PRIVATE rgb_endpoint endpoint_02 = {
 
 		.address.deviceAddress = 0x40,
 		.address.firstPinAddress = 3,
-		.address.invert = TRUE
+		.address.invert = INVERT_ENDPOINTS
 };
 
 PRIVATE rgb_endpoint endpoint_03 = {
 
 		.address.deviceAddress = 0x40,
 		.address.firstPinAddress = 6,
-		.address.invert = TRUE
+		.address.invert = INVERT_ENDPOINTS
 };
 
 PRIVATE rgb_endpoint endpoint_04 = {
 
 		.address.deviceAddress = 0x40,
 		.address.firstPinAddress = 9,
-		.address.invert = TRUE
+		.address.invert = INVERT_ENDPOINTS
 };
 
-PRIVATE int endpoints[NUM_EPS] ={
+PRIVATE int endpoints[NUMBER_ENDPOINTS] = {
+
 
 		LIGHT_COLORLIGHT_LIGHT_01_ENDPOINT,
+#if NUMBER_ENDPOINTS > 1
 		LIGHT_COLORLIGHT_LIGHT_02_ENDPOINT,
+#if NUMBER_ENDPOINTS > 2
 		LIGHT_COLORLIGHT_LIGHT_03_ENDPOINT,
+#if NUMBER_ENDPOINTS > 3
 		LIGHT_COLORLIGHT_LIGHT_04_ENDPOINT ,
+#endif
+#endif
+#endif
 
 };
 
@@ -141,10 +147,17 @@ PRIVATE rgb_endpoint *getEndpoint(uint8 epId){
 tsCLD_ZllDeviceTable sDeviceTable = { ZLL_NUMBER_DEVICES,
 		{
 				{ 0, ZLL_PROFILE_ID,COLOUR_LIGHT_DEVICE_ID,LIGHT_COLORLIGHT_LIGHT_01_ENDPOINT,2,0,0}
+#if NUMBER_ENDPOINTS > 1
 				,{ 0, ZLL_PROFILE_ID,COLOUR_LIGHT_DEVICE_ID,LIGHT_COLORLIGHT_LIGHT_02_ENDPOINT,2,0,0}
+#if NUMBER_ENDPOINTS > 2
 				,{ 0, ZLL_PROFILE_ID,COLOUR_LIGHT_DEVICE_ID,LIGHT_COLORLIGHT_LIGHT_03_ENDPOINT,2,0,0}
+#if NUMBER_ENDPOINTS > 3
 				,{ 0, ZLL_PROFILE_ID,COLOUR_LIGHT_DEVICE_ID,LIGHT_COLORLIGHT_LIGHT_04_ENDPOINT,2,0,0}
+#endif
+#endif
+#endif
 		}
+
 };
 
 
@@ -168,7 +181,8 @@ PUBLIC teZCL_Status eApp_ZLL_RegisterEndpoint(tfpZCL_ZCLCallBackFunction fptr, t
 
 	int i;
 
-	for (i = 0; i < NUM_EPS; ++i) {
+
+	for (i = 0; i < NUMBER_ENDPOINTS; ++i) {
 
 		registerEndpoint(fptr, endpoints[i]);
 
@@ -213,7 +227,7 @@ PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId){
 	memcpy(endpoint->light.sBasicServerCluster.au8ManufacturerName, "PV1", CLD_BAS_MANUF_NAME_SIZE);
 	memcpy(endpoint->light.sBasicServerCluster.au8ModelIdentifier, "PeeVeeOne.com", CLD_BAS_MODEL_ID_SIZE);
 	memcpy(endpoint->light.sBasicServerCluster.au8DateCode, "20171015", CLD_BAS_DATE_SIZE);
-	memcpy(endpoint->light.sBasicServerCluster.au8SWBuildID, "PV1_RGB_0.001", CLD_BAS_SW_BUILD_SIZE);
+	memcpy(endpoint->light.sBasicServerCluster.au8SWBuildID, "PV1.00001", CLD_BAS_SW_BUILD_SIZE);
 
 
 	endpoint->effect.u8Effect = E_CLD_IDENTIFY_EFFECT_STOP_EFFECT;
@@ -327,7 +341,7 @@ PUBLIC void vCreateInterpolationPoints( void){
 
 	int i;
 
-	for (i = 0; i < NUM_EPS; ++i) {
+	for (i = 0; i < NUMBER_ENDPOINTS; ++i) {
 
 		if(isEndpoint(endpoints[i]))
 		{
@@ -414,7 +428,7 @@ void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u3
 
 		DBG_vPrintf(TRACE_LIGHT_TASK, "rgb_setLevel to output fp: %d isOn:%d r:%d g:%d b:%d \n",endpoint->address.firstPinAddress, endpoint->lightSate.isOn,  u8Red, u8Green, u8Blue);
 
-		pca9685_setRgb(endpoint->address.firstPinAddress, red, green, blue, TRUE);
+		pca9685_setRgb(endpoint->address.firstPinAddress, red, green, blue, endpoint->address.invert);
 
 
 

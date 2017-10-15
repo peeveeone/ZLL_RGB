@@ -210,10 +210,10 @@ PRIVATE void registerEndpoint(tfpZCL_ZCLCallBackFunction fptr, uint8 epId){
 	eZLL_RegisterColourLightEndPoint(epId,fptr, &endpoint->light);
 
 	/* Initialise the strings in Basic */
-	memcpy(endpoint->light.sBasicServerCluster.au8ManufacturerName, "NXP", CLD_BAS_MANUF_NAME_SIZE);
-	memcpy(endpoint->light.sBasicServerCluster.au8ModelIdentifier, "ZLL-ColorLight", CLD_BAS_MODEL_ID_SIZE);
-	memcpy(endpoint->light.sBasicServerCluster.au8DateCode, "20150212", CLD_BAS_DATE_SIZE);
-	memcpy(endpoint->light.sBasicServerCluster.au8SWBuildID, "PV1_RGB_0000", CLD_BAS_SW_BUILD_SIZE);
+	memcpy(endpoint->light.sBasicServerCluster.au8ManufacturerName, "PV1", CLD_BAS_MANUF_NAME_SIZE);
+	memcpy(endpoint->light.sBasicServerCluster.au8ModelIdentifier, "PeeVeeOne.com", CLD_BAS_MODEL_ID_SIZE);
+	memcpy(endpoint->light.sBasicServerCluster.au8DateCode, "20171015", CLD_BAS_DATE_SIZE);
+	memcpy(endpoint->light.sBasicServerCluster.au8SWBuildID, "PV1_RGB_0.001", CLD_BAS_SW_BUILD_SIZE);
 
 
 	endpoint->effect.u8Effect = E_CLD_IDENTIFY_EFFECT_STOP_EFFECT;
@@ -324,18 +324,6 @@ void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u3
 
 PUBLIC void vCreateInterpolationPoints( void){
 
-	static bool bussy = FALSE;
-
-	if(bussy)
-		return;
-
-	if(!bussy){
-		bussy = TRUE;
-	} else {
-
-		DBG_vPrintf(TRACE_LIGHT_TASK, "vCreateInterpolationPoints - BUSSY \n");
-		return;
-	}
 
 	int i;
 
@@ -359,9 +347,8 @@ PUBLIC void vCreateInterpolationPoints( void){
 
 			DBG_vPrintf(TRACE_LIGHT_TASK, "vCreateInterpolationPoints - ep :%d NOT AN ENDPOINT\n", i);
 		}
-	}
 
-	bussy = FALSE;
+	}
 }
 
 void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u32Green, uint32 u32Blue)
@@ -373,8 +360,8 @@ void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u3
 	needsUpdate = endpoint->rgbState.red != (uint8) u32Red ||
 			endpoint->rgbState.green !=(uint8) u32Green ||
 			endpoint->rgbState.blue != (uint8) u32Blue||
-			endpoint->lightSate.level != (uint8) level;
-
+			endpoint->lightSate.level != (uint8) level ||
+			endpoint->light.sOnOffServerCluster.bOnOff != endpoint->lightSate.isOn;
 
 	if(needsUpdate){
 
@@ -386,11 +373,16 @@ void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u3
 		endpoint->rgbState.green = (uint8) u32Green;
 		endpoint->rgbState.blue  = (uint8) u32Blue;
 		endpoint->lightSate.level = (uint8) MAX(1, level);
+		//endpoint->lightSate.isOn = endpoint->light.sOnOffServerCluster.bOnOff;
+
+		if (endpoint->light.sIdentifyServerCluster.u16IdentifyTime == 0)
+			endpoint->lightSate.isOn = endpoint->light.sOnOffServerCluster.bOnOff;
 
 
 		/* Is the lamp on ? */
 		if (endpoint->lightSate.isOn)
 		{
+
 			/* Set outputs */
 
 			/* Scale colour for brightness level */
@@ -413,21 +405,17 @@ void rgb_setLevel(rgb_endpoint *endpoint, uint32 level, uint32 u32Red, uint32 u3
 			u8Blue  = 0;
 		}
 
+
+
 		// scale to 12 bit
 		red =  u8Red << 4 | u8Red >> 4;
 		green = u8Green << 4 | u8Green >> 4;
 		blue =  u8Blue << 4 | u8Blue >> 4;
 
-		DBG_vPrintf(TRACE_LIGHT_TASK, "rgb_setLevel to output fp: %d  r:%d g:%d b:%d \n",endpoint->address.firstPinAddress,  u8Red, u8Green, u8Blue);
-
-		//		pca9685_setPin(0, red, TRUE);
-		//		pca9685_setPin(1, green, TRUE);
-		//		pca9685_setPin(2, blue, TRUE);
-		//	//	pca9685_setRgb(0, red, green, blue, TRUE);
+		DBG_vPrintf(TRACE_LIGHT_TASK, "rgb_setLevel to output fp: %d isOn:%d r:%d g:%d b:%d \n",endpoint->address.firstPinAddress, endpoint->lightSate.isOn,  u8Red, u8Green, u8Blue);
 
 		pca9685_setRgb(endpoint->address.firstPinAddress, red, green, blue, TRUE);
 
-		//write
 
 
 	}

@@ -45,6 +45,7 @@ PUBLIC void rgb_setLevels_current(rgb_endpoint* endpoint){
 PUBLIC void rgb_setLevels(rgb_endpoint* endpoint, bool_t bOn, uint8 u8Level, uint8 u8Red, uint8 u8Green, uint8 u8Blue)
 {
 
+	DBG_vPrintf(TRACE_LIGHT_TASK, "rgb_setLevels to output fp: %d isOn:%d r:%d g:%d b:%d \n",endpoint->address.firstPinAddress, endpoint->lightSate.isOn,  u8Red, u8Green, u8Blue);
 
 	if (bOn == TRUE)
 	{
@@ -57,9 +58,10 @@ PUBLIC void rgb_setLevels(rgb_endpoint* endpoint, bool_t bOn, uint8 u8Level, uin
 
 	}
 
-	endpoint->lightSate.isOn = bOn;
+	if (endpoint->light.sIdentifyServerCluster.u16IdentifyTime > 0){
+		endpoint->lightSate.isOn = bOn;
+	}
 
-	//vBULB_SetOnOff(bOn);
 }
 
 

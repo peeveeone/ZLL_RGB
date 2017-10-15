@@ -121,7 +121,7 @@ PUBLIC void pca9685_setPin(uint8_t num, uint16_t val, bool invert){
 		}
 		else if (val == 4095) {
 			// Special value for signal fully off.
-			pca9685_setPWM(num, 0, 4095);
+			pca9685_setPWM(num, 0, 4096);
 		}
 		else {
 			pca9685_setPWM(num, 0, 4095-val);
@@ -134,13 +134,15 @@ PUBLIC void pca9685_setPin(uint8_t num, uint16_t val, bool invert){
 		}
 		else if (val == 0) {
 			// Special value for signal fully off.
-			pca9685_setPWM(num, 0, 4095);
+			pca9685_setPWM(num, 0, 4096);
 		}
 		else {
 			pca9685_setPWM(num, 0, val);
 		}
 	}
 }
+
+
 
 void calcOnOff(uint16_t *in, bool_t *inv, uint16_t *on, uint16_t *off );
 void setPWM_RGB(uint8_t *num, uint16_t *onRed, uint16_t *offRed, uint16_t *onGreen, uint16_t *offGreen, uint16_t *onBlue, uint16_t *offBlue);
@@ -175,7 +177,7 @@ void calcOnOff(uint16_t *in, bool_t *inv, uint16_t *on, uint16_t *off ){
 		else if (*in == 4095) {
 
 			*on = 0;
-			*off = 4095;
+			*off = 4096;
 		}
 		else {
 
@@ -193,7 +195,7 @@ void calcOnOff(uint16_t *in, bool_t *inv, uint16_t *on, uint16_t *off ){
 		else if (*in == 0) {
 
 			*on = 0;
-			*off = 4095;
+			*off = 4096;
 
 		}
 		else {
@@ -206,6 +208,9 @@ void calcOnOff(uint16_t *in, bool_t *inv, uint16_t *on, uint16_t *off ){
 }
 
 void setPWM_RGB(uint8_t *num, uint16_t *onRed, uint16_t *offRed, uint16_t *onGreen, uint16_t *offGreen, uint16_t *onBlue, uint16_t *offBlue){
+
+
+	DBG_vPrintf(TRACE_PCA9685, "setPWM_RGB  rOn:%d rOff:%d gOn:%d gOff:%d bOn:%d bOff:%d\n", *onRed, *offRed, *onGreen, *offGreen, *onBlue, *offBlue);
 
 	uint8_t dta_pwm[] =
 	{
